@@ -1,6 +1,7 @@
 package com.example.paint00;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -48,11 +49,13 @@ public class Main extends Application {
         MenuItem saveItem = new MenuItem("Save");
         MenuItem saveAsItem = new MenuItem("Save As");
         MenuItem openItem = new MenuItem("Open Image");
+        MenuItem closeApp = new MenuItem("Close");
 
         //add menu item to menu
         topMenu.getItems().add(saveItem);
         topMenu.getItems().add(saveAsItem);
         topMenu.getItems().add(openItem);
+        topMenu.getItems().add(closeApp);
 
         //create a menu bar
         MenuBar topBar = new MenuBar();
@@ -118,6 +121,7 @@ public class Main extends Application {
             }
 
         });
+        closeApp.setOnAction(e-> Platform.exit());
         borderPane.setTop(topBar);
         borderPane.setCenter(gridPane);
         Scene scene = new Scene(borderPane, 1000,1000);
