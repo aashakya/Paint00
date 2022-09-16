@@ -12,16 +12,17 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
 
 import javax.imageio.ImageIO;
+import javafx.scene.input.MouseEvent;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.concurrent.atomic.AtomicReference;
 
 public class Main extends Application {
     @Override
@@ -29,14 +30,23 @@ public class Main extends Application {
         //set up the title for the stage
         primaryStage.setTitle("Paint 00");
 
-        Canvas canvas= new Canvas(500,500); // create the canvas to paint on
-        AtomicReference<GraphicsContext> g = new AtomicReference<>(canvas.getGraphicsContext2D());
+        int canvHeight = 720;
+        int canvWidth = 1080;
+
+
+        Canvas canvas= new Canvas(canvHeight,canvWidth); // create the canvas to paint on
+        final GraphicsContext gc = canvas.getGraphicsContext2D();
+        initDraw(gc, canvWidth,canvHeight);
+        ColorPicker colorPicker = new ColorPicker();
+        //gc.get().setFill(Color.WHITE);
+        //gc.get().fillRect(0,0,canvHeight,canvWidth);
         VBox layout = new VBox();// create a vbox with 7 spacing between each child
 
         final String[] nameOfFile = new String[1]; // to save file
         final String[] ext = new String[1];
         //create a grid pane & border pane
         GridPane gridPane = new GridPane();
+        gridPane.add(canvas,0,0);
 //        BorderPane borderPane = new BorderPane();
 //        borderPane.setPrefSize(500,400);
         //create the menu
@@ -82,11 +92,12 @@ public class Main extends Application {
                     imageInserted.setFitHeight(img.getHeight());
                     imageInserted.setPreserveRatio(true);
 
-                    g.set(canvas.getGraphicsContext2D());
-                    g.get().getCanvas().setWidth(img.getWidth());
-                    g.get().getCanvas().setHeight(img.getHeight());
-                    g.get().drawImage(img, 0,0, img.getWidth(),img.getHeight());
+                    //canvas.getGraphicsContext2D().set(gc);
+                    //gc.getCanvas().setWidth(img.getWidth());
+                    //gc.get().getCanvas().setHeight(img.getHeight());
+                   // gc.get().drawImage(img, 0,0, img.getWidth(),img.getHeight());
                     gridPane.add(canvas,0,0);
+
                 }
                 catch (IOException ex) {
                     System.out.println("Error");
@@ -126,25 +137,51 @@ public class Main extends Application {
         HBox toolBoxTop = new HBox();
         toolBoxTop.setPadding(new Insets(15, 12, 15, 12));
         toolBoxTop.setSpacing(10);
-        ColorPicker colorPicker = new ColorPicker();
-        TextField brushsize = new TextField();
+        Slider brushsize = new Slider(1,100, 10);
+
+        brushsize.setShowTickLabels(true);
+        brushsize.setMajorTickUnit(10f);
+        brushsize.setBlockIncrement(10f);
         ToggleButton eraser = new ToggleButton("Eraser");
 
         toolBoxTop.getChildren().add(0, colorPicker);
         toolBoxTop.getChildren().add(1,brushsize);
         toolBoxTop.getChildren().add(2,eraser);
 
-        canvas.setOnMouseDragged(e -> {
-            double size = 25;
-            double x = e.getX() - size/2;
-            double y = e.getY() - size/2;
+//        canvas.setOnMouseDragged(e -> {
+//            double size = brushsize.getValue();
+//            double x = e.getX() - size/2;
+//            double y = e.getY() - size/2;
+//            if (eraser.isSelected()){
+//                gc.get().clearRect(x, y, size, size);
+//            }
+//            else {
+//                gc.get().setFill(colorPicker.getValue());
+//                gc.get().fillRect(x,y,size,size);
+//            }
+//        });
+
+        canvas.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
+            gc.setLineWidth(brushsize.getValue());
             if (eraser.isSelected()){
-                g.get().clearRect(x, y, size, size);
+                gc.setStroke(Color.WHITE);
             }
-            else {
-                g.get().setFill(colorPicker.getValue());
-                g.get().fillRect(x,y,size,size);
+            else{
+                gc.setStroke(colorPicker.getValue());
             }
+            gc.beginPath();
+            gc.moveTo(event.getX(), event.getY());
+            gc.stroke();
+        });
+
+        canvas.addEventHandler(MouseEvent.MOUSE_DRAGGED,
+                event -> {
+                    gc.lineTo(event.getX(), event.getY());
+                    gc.stroke();
+                });
+
+        canvas.addEventHandler(MouseEvent.MOUSE_RELEASED, event -> {
+
         });
 
         layout.getChildren().add(topBar);
@@ -155,10 +192,14 @@ public class Main extends Application {
 //        borderPane.setCenter(canvasPane);
         Scene scene = new Scene(layout, 1000,1000);
 
+
         primaryStage.setScene(scene);
         primaryStage.show();
     }
-
+    private void initDraw(GraphicsContext gc, int canvasWidth, int canvasHeight){
+        gc.setFill(Color.WHITE);
+        gc.fillRect(0, 0, canvasWidth, canvasHeight);
+    }
     public static void main(String[] args) {
         launch();
     }
