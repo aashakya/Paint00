@@ -30,16 +30,14 @@ public class Main extends Application {
         //set up the title for the stage
         primaryStage.setTitle("Paint 00");
 
-        int canvHeight = 720;
+        int canvHeight = 1080;
         int canvWidth = 1080;
-
 
         Canvas canvas= new Canvas(canvHeight,canvWidth); // create the canvas to paint on
         final GraphicsContext gc = canvas.getGraphicsContext2D();
         initDraw(gc, canvWidth,canvHeight);
+        ScrollPane sp = new ScrollPane();
         ColorPicker colorPicker = new ColorPicker();
-        //gc.get().setFill(Color.WHITE);
-        //gc.get().fillRect(0,0,canvHeight,canvWidth);
         VBox layout = new VBox();// create a vbox with 7 spacing between each child
 
         final String[] nameOfFile = new String[1]; // to save file
@@ -47,31 +45,29 @@ public class Main extends Application {
         //create a grid pane & border pane
         GridPane gridPane = new GridPane();
         gridPane.add(canvas,0,0);
-//        BorderPane borderPane = new BorderPane();
-//        borderPane.setPrefSize(500,400);
+
         //create the menu
-        Menu topMenu = new Menu("File");
+        Menu fileMenu = new Menu("File");
 
         ImageView imageInserted = new ImageView();
 
         //crete menu items
-        MenuItem saveItem = new MenuItem("Save");
+        //MenuItem saveItem = new MenuItem("Save");
         MenuItem saveAsItem = new MenuItem("Save As");
         MenuItem openItem = new MenuItem("Open Image");
         MenuItem closeApp = new MenuItem("Close");
 
         //add menu item to menu
-        topMenu.getItems().add(saveItem);
-        topMenu.getItems().add(saveAsItem);
-        topMenu.getItems().add(openItem);
-        topMenu.getItems().add(closeApp);
+        //fileMenu.getItems().add(saveItem);
+        fileMenu.getItems().add(saveAsItem);
+        fileMenu.getItems().add(openItem);
+        fileMenu.getItems().add(closeApp);
 
         //create a menu bar
         MenuBar topBar = new MenuBar();
 
         //add menu to the menu bar
-        topBar.getMenus().add(topMenu);
-
+        topBar.getMenus().add(fileMenu);
 
         // for opening the file
         FileChooser fileChooser = new FileChooser();
@@ -92,10 +88,9 @@ public class Main extends Application {
                     imageInserted.setFitHeight(img.getHeight());
                     imageInserted.setPreserveRatio(true);
 
-                    //canvas.getGraphicsContext2D().set(gc);
-                    //gc.getCanvas().setWidth(img.getWidth());
-                    //gc.get().getCanvas().setHeight(img.getHeight());
-                   // gc.get().drawImage(img, 0,0, img.getWidth(),img.getHeight());
+                    gc.getCanvas().setWidth(img.getWidth());
+                    gc.getCanvas().setHeight(img.getHeight());
+                    gc.drawImage(img, 0,0, img.getWidth(),img.getHeight());
                     gridPane.add(canvas,0,0);
 
                 }
@@ -113,6 +108,9 @@ public class Main extends Application {
                     new ExtensionFilter("BMP file","*.bmp"));
             File savedImg = saveImgAs.showSaveDialog(null);
             nameOfFile[0] = savedImg.getName();
+            //int index = savedImg.getName().indexOf(".");
+            //if (index != -1){
+            ///.substring(0,index);}
             ext[0] = nameOfFile[0].substring(1 + nameOfFile[0].lastIndexOf(".")).toLowerCase();
             try {           //attempt to make a save file from the inserted image
                 WritableImage writableImage = new WritableImage((int) canvas.getWidth(), (int) canvas.getHeight());
@@ -122,16 +120,19 @@ public class Main extends Application {
                 throw new RuntimeException(o);
             }
         });
-        saveItem.setOnAction(e -> {
-            try {           //attempt to make a save file from the inserted image
-                WritableImage writableImage = new WritableImage((int) canvas.getWidth(), (int) canvas.getHeight());
-                canvas.snapshot(null,writableImage);
-                ImageIO.write(SwingFXUtils.fromFXImage(imageInserted.getImage(),null), ext[0], new File(nameOfFile[0]));
-                System.out.println(new File(nameOfFile[0]));
-            } catch (IOException o) {   //If the above line breaks, throw an exception
-                throw new RuntimeException(o);
-            }
-        });
+//        saveItem.setOnAction(e -> {
+//            try {           //attempt to make a save file from the inserted image
+//                WritableImage writableImage = new WritableImage((int) canvas.getWidth(), (int) canvas.getHeight());
+//                canvas.snapshot(null,writableImage);
+//                RenderedImage ri = SwingFXUtils.fromFXImage(imageInserted.getImage(),null);
+//                File savedImg = null;
+//                ImageIO.write(ri, nameOfFile[0], (ImageOutputStream) ri);
+//                System.out.println(new File(nameOfFile[0]));
+//
+//            } catch (IOException o) {   //If the above line breaks, throw an exception
+//                System.out.println("Save As first");
+//            }
+//        });
         closeApp.setOnAction(e-> Platform.exit());
 
         HBox toolBoxTop = new HBox();
@@ -147,19 +148,6 @@ public class Main extends Application {
         toolBoxTop.getChildren().add(0, colorPicker);
         toolBoxTop.getChildren().add(1,brushsize);
         toolBoxTop.getChildren().add(2,eraser);
-
-//        canvas.setOnMouseDragged(e -> {
-//            double size = brushsize.getValue();
-//            double x = e.getX() - size/2;
-//            double y = e.getY() - size/2;
-//            if (eraser.isSelected()){
-//                gc.get().clearRect(x, y, size, size);
-//            }
-//            else {
-//                gc.get().setFill(colorPicker.getValue());
-//                gc.get().fillRect(x,y,size,size);
-//            }
-//        });
 
         canvas.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
             gc.setLineWidth(brushsize.getValue());
@@ -187,12 +175,9 @@ public class Main extends Application {
         layout.getChildren().add(topBar);
         layout.getChildren().add(toolBoxTop);
         layout.getChildren().add(gridPane);
-
-//        borderPane.setTop(layout);
-//        borderPane.setCenter(canvasPane);
+        sp.setContent(gridPane);
+        layout.getChildren().add(sp);
         Scene scene = new Scene(layout, 1000,1000);
-
-
         primaryStage.setScene(scene);
         primaryStage.show();
     }
