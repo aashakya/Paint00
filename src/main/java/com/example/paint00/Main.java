@@ -1,26 +1,22 @@
 package com.example.paint00;
 
 import javafx.application.Application;
-import javafx.application.Platform;
-import javafx.embed.swing.SwingFXUtils;
 import javafx.geometry.Insets;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.*;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.image.WritableImage;
-import javafx.scene.layout.*;
+import javafx.scene.control.ColorPicker;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.Slider;
+import javafx.scene.control.ToggleButton;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.stage.FileChooser;
-import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
-
-import javax.imageio.ImageIO;
-import javafx.scene.input.MouseEvent;
 
 
 public class Main extends Application {
@@ -87,8 +83,9 @@ public class Main extends Application {
 
         });
         // Menu bar
-        AppMenu topMenu = new AppMenu(primaryStage, layout, gc, gridPane,canvas);
+        AppMenu topMenu = new AppMenu(primaryStage, gc, gridPane,canvas);
 
+        layout.getChildren().add(topMenu.vbox);
         layout.getChildren().add(toolBoxTop);
         layout.getChildren().add(gridPane);
         sp.setContent(gridPane);

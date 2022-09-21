@@ -7,17 +7,16 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.image.WritableImage;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import javafx.scene.image.ImageView;
-import javafx.scene.image.Image;
-import javafx.scene.image.WritableImage;
-import javafx.stage.FileChooser;
-import javafx.stage.FileChooser.ExtensionFilter;
 
 import javax.imageio.ImageIO;
+import java.awt.image.RenderedImage;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -30,7 +29,7 @@ public class AppMenu{
     final String[] nameOfFile = new String[1]; // to save file
     final String[] ext = new String[1];
 
-    AppMenu(Stage primaryStage, VBox layout, GraphicsContext gc, GridPane gridPane, Canvas canvas){
+    AppMenu(Stage primaryStage, GraphicsContext gc, GridPane gridPane, Canvas canvas){
         //create menu
         Menu fileMenu = new Menu("File");
         Menu helpMenu = new Menu("Help");
@@ -53,7 +52,7 @@ public class AppMenu{
 
         //add menu to the menu bar
         menuBar.getMenus().addAll(fileMenu,helpMenu);
-        layout.getChildren().add(menuBar);
+        vbox.getChildren().add(menuBar);
         ImageView imageInserted = new ImageView();
         // for opening the file
         FileChooser fileChooser = new FileChooser();
@@ -106,20 +105,21 @@ public class AppMenu{
                 throw new RuntimeException(o);
             }
         });
-//        saveItem.setOnAction(e -> {
-//            try {           //attempt to make a save file from the inserted image
-//                WritableImage writableImage = new WritableImage((int) canvas.getWidth(), (int) canvas.getHeight());
-//                canvas.snapshot(null,writableImage);
-//                RenderedImage ri = SwingFXUtils.fromFXImage(imageInserted.getImage(),null);
-//                File savedImg = null;
-        //        ImageIO.write(SwingFXUtils.fromFXImage(writableImage,null), ext[0], savedImg);
-//                ImageIO.write(ri, ext[0], savedImg);
-//                System.out.println(new File(nameOfFile[0]));
-//
-//            } catch (IOException o) {   //If the above line breaks, throw an exception
-//                System.out.println("Save As first");
-//            }
-//        });
+        saveItem.setOnAction(e -> {
+            try {           //attempt to make a save file from the inserted image
+                WritableImage writableImage;
+                writableImage = new WritableImage((int) canvas.getWidth(), (int) canvas.getHeight());
+                canvas.snapshot(null,writableImage);
+                RenderedImage ri = SwingFXUtils.fromFXImage(imageInserted.getImage(),null);
+                File savedImg = null;
+                ImageIO.write(SwingFXUtils.fromFXImage(writableImage,null), ext[0], savedImg);
+                ImageIO.write(ri, ext[0], savedImg);
+                System.out.println(new File(nameOfFile[0]));
+
+            } catch (IOException o) {   //If the above line breaks, throw an exception
+                System.out.println("Save As first");
+            }
+        });
         closeApp.setOnAction(e-> Platform.exit());
 
 
