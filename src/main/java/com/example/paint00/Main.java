@@ -1,18 +1,12 @@
 package com.example.paint00;
 
 import javafx.application.Application;
-import javafx.geometry.Insets;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.ColorPicker;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.Slider;
-import javafx.scene.control.ToggleButton;
-import javafx.scene.input.MouseEvent;
+import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Screen;
@@ -30,6 +24,8 @@ public class Main extends Application {
         primaryStage.setY(screenBounds.getMinY());
         VBox layout = new VBox(7);// create a vbox with 7 spacing between each child
 
+        TabPane tabPane = new TabPane();
+
         int canvHeight = 1080;
         int canvWidth = 1080;
 
@@ -37,8 +33,6 @@ public class Main extends Application {
         GraphicsContext gc = canvas.getGraphicsContext2D();
         initDraw(gc, canvWidth,canvHeight);
         ScrollPane sp = new ScrollPane();
-        ColorPicker colorPicker = new ColorPicker();
-        colorPicker.setValue(Color.BLACK);
 
 
         //create a grid pane & border pane
@@ -46,47 +40,14 @@ public class Main extends Application {
         gridPane.add(canvas,0,0);
 
 
-        HBox toolBoxTop = new HBox();
-        toolBoxTop.setPadding(new Insets(15, 12, 15, 12));
-        toolBoxTop.setSpacing(10);
-        Slider brushsize = new Slider(1,100, 10);
 
-        brushsize.setShowTickLabels(true);
-        brushsize.setMajorTickUnit(10f);
-        brushsize.setBlockIncrement(10f);
-        ToggleButton eraser = new ToggleButton("Eraser");
-
-        toolBoxTop.getChildren().add(0, colorPicker);
-        toolBoxTop.getChildren().add(1,brushsize);
-        toolBoxTop.getChildren().add(2,eraser);
-
-        canvas.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
-            gc.setLineWidth(brushsize.getValue());
-            if (eraser.isSelected()){
-                gc.setStroke(Color.WHITE);
-            }
-            else{
-                gc.setStroke(colorPicker.getValue());
-            }
-            gc.beginPath();
-            gc.moveTo(event.getX(), event.getY());
-            gc.stroke();
-        });
-
-        canvas.addEventHandler(MouseEvent.MOUSE_DRAGGED,
-                event -> {
-                    gc.lineTo(event.getX(), event.getY());
-                    gc.stroke();
-                });
-
-        canvas.addEventHandler(MouseEvent.MOUSE_RELEASED, event -> {
-
-        });
         // Menu bar
         AppMenu topMenu = new AppMenu(primaryStage, gc, gridPane,canvas);
 
+        ToolBoxTop toolBoxTop = new ToolBoxTop(canvas,gc);
+
         layout.getChildren().add(topMenu.vbox);
-        layout.getChildren().add(toolBoxTop);
+        layout.getChildren().add(toolBoxTop.toolBoxTop);
         layout.getChildren().add(gridPane);
         sp.setContent(gridPane);
         layout.getChildren().add(sp);
