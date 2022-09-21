@@ -24,8 +24,6 @@ public class Main extends Application {
         primaryStage.setY(screenBounds.getMinY());
         VBox layout = new VBox(7);// create a vbox with 7 spacing between each child
 
-        TabPane tabPane = new TabPane();
-
         int canvHeight = 1080;
         int canvWidth = 1080;
 
