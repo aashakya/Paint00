@@ -10,8 +10,11 @@ import javafx.stage.Stage;
 
 
 public class Main extends Application {
+    private static Stage myStage;
+
     @Override
     public void start(Stage primaryStage) {
+        myStage = primaryStage;
         //set up the title for the stage
         primaryStage.setTitle("Paint 00");
         // Get primary screen bounds
@@ -29,7 +32,7 @@ public class Main extends Application {
         ScrollPane sp = new ScrollPane();
 
         // Menu bar
-        AppMenu topMenu = new AppMenu(primaryStage, canvas);
+        AppMenu topMenu = new AppMenu(canvas);
 
         ToolBoxTop toolBoxTop = new ToolBoxTop(canvas);
 
@@ -41,6 +44,10 @@ public class Main extends Application {
         Scene scene = new Scene(layout, 10000,1000);
         primaryStage.setScene(scene);
         primaryStage.show();
+    }
+
+    public static Stage getStage() {
+        return myStage;
     }
 
     public static void main(String[] args) {

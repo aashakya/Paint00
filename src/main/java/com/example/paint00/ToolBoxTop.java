@@ -6,7 +6,6 @@ import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
-import javafx.scene.canvas.Canvas;
 
 public class ToolBoxTop {
     ColorPicker colorPicker = new ColorPicker();
@@ -24,7 +23,8 @@ public class ToolBoxTop {
     TextField canvasWidth = new TextField();
 
     HBox toolBoxTop = new HBox();
-    ToolBoxTop(Canvas canvas, GraphicsContext gc){
+    ToolBoxTop(CanvasPane canvas){
+        GraphicsContext gc = canvas.gc;
         toggleGroup.getToggles().addAll(pen,eraser,drawLine,drawSquare,drawCircle,drawRect,drawEllipse);
         colorPicker.setValue(Color.BLACK);
 
@@ -42,6 +42,7 @@ public class ToolBoxTop {
             //gc.setLineWidth(brushSize.getValue());
             if (eraser.isSelected()){
                 gc.setStroke(Color.WHITE);
+                gc.setLineWidth(brushSize.getValue());
                 gc.beginPath();
                 gc.moveTo(event.getX(), event.getY());
                 gc.stroke();

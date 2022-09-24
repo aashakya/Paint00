@@ -2,7 +2,6 @@ package com.example.paint00;
 
 import javafx.application.Platform;
 import javafx.embed.swing.SwingFXUtils;
-import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
@@ -13,7 +12,6 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 import javafx.stage.FileChooser;
-import javafx.stage.Stage;
 import javax.imageio.ImageIO;
 import java.awt.image.RenderedImage;
 import java.io.File;
@@ -26,8 +24,9 @@ public class AppMenu{
     String[] ext = new String[1];
     File saveFile;
 
-    AppMenu(Stage primaryStage, GraphicsContext gc, Canvas canvas){
+    AppMenu(CanvasPane canvas){
         //create menu
+        GraphicsContext gc = canvas.gc;
         Menu fileMenu = new Menu("File");
         Menu helpMenu = new Menu("Help");
         
@@ -56,9 +55,10 @@ public class AppMenu{
             fileChooser.getExtensionFilters().addAll(              //Including filters for extension types
                     new FileChooser.ExtensionFilter("Image Files", "*.png"),
                     new FileChooser.ExtensionFilter("JPEG File", "*.jpeg"),
+                    new FileChooser.ExtensionFilter("BMP file","*.bmp"),
                     new FileChooser.ExtensionFilter("PDF File", "*.pdf")
             );
-            File insImg = fileChooser.showOpenDialog(primaryStage);
+            File insImg = fileChooser.showOpenDialog(Main.getStage());
             if (insImg != null) {
                 Image img = new Image(insImg.toURI().toString());
                 saveFile = insImg;
@@ -95,14 +95,14 @@ public class AppMenu{
                 System.out.println(new File(nameOfFile));
 
             } catch (IOException o) {   //If the above line breaks, throw an exception
-                System.out.println("Save As first");
+
             }
         });
         closeApp.setOnAction(e-> Platform.exit());
 
         openItem.setAccelerator(new KeyCodeCombination(KeyCode.O, KeyCombination.CONTROL_DOWN));
         saveItem.setAccelerator(new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN));
-        closeApp.setAccelerator(new KeyCodeCombination(KeyCode.F4, KeyCombination.ALT_DOWN));
+        closeApp.setAccelerator(new KeyCodeCombination(KeyCode.Q, KeyCombination.CONTROL_DOWN));
         saveAsItem.setAccelerator(new KeyCodeCombination(KeyCode.S, KeyCombination.SHIFT_DOWN, KeyCombination.CONTROL_DOWN));
     }
 
