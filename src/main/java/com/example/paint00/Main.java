@@ -23,29 +23,32 @@ public class Main extends Application {
         primaryStage.setX(screenBounds.getMinX());
         primaryStage.setY(screenBounds.getMinY());
         VBox layout = new VBox(7);// create a vbox with 7 spacing between each child
-
         int canvHeight = 1080;
         int canvWidth = 1080;
 
         Canvas canvas= new Canvas(canvHeight,canvWidth); // create the canvas to paint on
+
+//        TabPane tabPane = new TabPane(); // create a tab pane
+//
+//        Tab tab1 = new Tab();
+
+
         GraphicsContext gc = canvas.getGraphicsContext2D();
         initDraw(gc, canvWidth,canvHeight);
         ScrollPane sp = new ScrollPane();
 
-
-        //create a grid pane & border pane
+        //create a grid pane
         GridPane gridPane = new GridPane();
         gridPane.add(canvas,0,0);
 
-
-
         // Menu bar
-        AppMenu topMenu = new AppMenu(primaryStage, gc, gridPane,canvas);
+        AppMenu topMenu = new AppMenu(primaryStage, gc,canvas);
 
         ToolBoxTop toolBoxTop = new ToolBoxTop(canvas,gc);
 
-        layout.getChildren().add(topMenu.vbox);
+        layout.getChildren().add(topMenu.menuBar);
         layout.getChildren().add(toolBoxTop.toolBoxTop);
+//        layout.getChildren().add(tabPane);
         layout.getChildren().add(gridPane);
         sp.setContent(gridPane);
         layout.getChildren().add(sp);

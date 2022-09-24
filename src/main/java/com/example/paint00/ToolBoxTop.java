@@ -25,7 +25,6 @@ public class ToolBoxTop {
 
     HBox toolBoxTop = new HBox();
     ToolBoxTop(Canvas canvas, GraphicsContext gc){
-        pen.setSelected(true);
         toggleGroup.getToggles().addAll(pen,eraser,drawLine,drawSquare,drawCircle,drawRect,drawEllipse);
         colorPicker.setValue(Color.BLACK);
 
@@ -40,22 +39,33 @@ public class ToolBoxTop {
         toolBoxTop.getChildren().addAll(colorPicker,brushSize,canvasWidth,pen,eraser,drawLine,drawSquare,drawCircle,drawRect,drawEllipse);
 
         canvas.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
-            gc.setLineWidth(brushSize.getValue());
+            //gc.setLineWidth(brushSize.getValue());
             if (eraser.isSelected()){
                 gc.setStroke(Color.WHITE);
+                gc.beginPath();
+                gc.moveTo(event.getX(), event.getY());
+                gc.stroke();
             }
             else if (pen.isSelected()){
                 gc.setStroke(colorPicker.getValue());
+                gc.setLineWidth(brushSize.getValue());
+                gc.beginPath();
+                gc.moveTo(event.getX(), event.getY());
+                gc.stroke();
             }
-            gc.beginPath();
-            gc.moveTo(event.getX(), event.getY());
-            gc.stroke();
+
         });
 
         canvas.addEventHandler(MouseEvent.MOUSE_DRAGGED,
                 event -> {
-                    gc.lineTo(event.getX(), event.getY());
-                    gc.stroke();
+                    if (pen.isSelected()){
+                        gc.lineTo(event.getX(), event.getY());
+                        gc.stroke();
+                    }
+                    else if(eraser.isSelected()){
+                        gc.lineTo(event.getX(), event.getY());
+                        gc.stroke();
+                    }
                 });
 
         canvas.addEventHandler(MouseEvent.MOUSE_RELEASED, event -> {

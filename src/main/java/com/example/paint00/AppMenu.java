@@ -12,7 +12,6 @@ import javafx.scene.image.WritableImage;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
-import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javax.imageio.ImageIO;
@@ -23,7 +22,6 @@ import java.io.IOException;
 public class AppMenu{
     //create menu bar
     MenuBar menuBar = new MenuBar();
-    VBox vbox = new VBox();
     String nameOfFile = "Untitled"; // to save file
     String[] ext = new String[1];
     File saveFile;
@@ -51,7 +49,6 @@ public class AppMenu{
 
         //add menu to the menu bar
         menuBar.getMenus().addAll(fileMenu,helpMenu);
-        vbox.getChildren().add(menuBar);
         // for opening the file
         FileChooser fileChooser = new FileChooser();
         openItem.setOnAction(e -> {
