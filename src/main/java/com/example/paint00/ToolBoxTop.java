@@ -54,7 +54,16 @@ public class ToolBoxTop {
         toggleGroup.selectedToggleProperty().addListener((observable) -> {
             if (pen.isSelected()){selectedTool = "pen";}
             else if (eraser.isSelected()) {selectedTool = "eraser";}
+            else if (drawLine.isSelected()){selectedTool="line";}
+            else if (drawRect.isSelected()) {selectedTool="rect";}
+            else if (drawSquare.isSelected()) {selectedTool="square";}
+            else if (drawCircle.isSelected()) {selectedTool="circle";}
+            else if (drawEllipse.isSelected()) {selectedTool="ellipse";}
             else selectedTool="none";
+        });
+
+        canvasWidth.textProperty().addListener((observable, oldValue, newValue) -> {
+//            CanvasPane.setWidth(Double.parseDouble(canvasWidth.getText()));
         });
     }
 }
