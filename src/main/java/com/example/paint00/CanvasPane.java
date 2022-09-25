@@ -8,6 +8,7 @@ public class CanvasPane extends myCanvas{
     double width = 900;
     double height = 700;
     CanvasPane(){
+        super();
         this.setWidth(width);
         this.setHeight(height);
         initDraw(gc, width, height);
@@ -30,6 +31,7 @@ public class CanvasPane extends myCanvas{
                 default -> {
                 }
             }
+            System.out.println(ToolBoxTop.getSelectedTool());
         });
 
         this.addEventHandler(MouseEvent.MOUSE_DRAGGED,

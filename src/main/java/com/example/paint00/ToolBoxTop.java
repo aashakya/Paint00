@@ -30,13 +30,11 @@ public class ToolBoxTop {
     public static double getBrushSize() {
         return brushSize.getValue();
     }
-
     public static String getSelectedTool() {
         if(selectedTool != null){
             return selectedTool;}
         else return "None";
     }
-
 
     ToolBoxTop(){
         toggleGroup.getToggles().addAll(pen,eraser,drawLine,drawSquare,drawCircle,drawRect,drawEllipse);
@@ -52,8 +50,11 @@ public class ToolBoxTop {
         canvasWidth.setPromptText("Enter width");
         toolBoxTop.getChildren().addAll(colorPicker,brushSize,canvasWidth,pen,eraser,drawLine,drawSquare,drawCircle,drawRect,drawEllipse);
 
-        if (pen.isSelected()){selectedTool = "pen";}
-        else if (eraser.isSelected()) {selectedTool = "eraser";}
-        else selectedTool="none";
+
+        toggleGroup.selectedToggleProperty().addListener((observable) -> {
+            if (pen.isSelected()){selectedTool = "pen";}
+            else if (eraser.isSelected()) {selectedTool = "eraser";}
+            else selectedTool="none";
+        });
     }
 }
