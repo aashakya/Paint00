@@ -37,7 +37,7 @@ public class Main extends Application {
         tab1.setContent(sp);
         CanvasPane canvas= new CanvasPane(); // create the canvas to paint on
 
-        ToolBoxTop toolBoxTop = new ToolBoxTop(canvas);
+        ToolBoxTop toolBoxTop = new ToolBoxTop();
         // Menu bar
         AppMenu topMenu = new AppMenu(canvas);
 

@@ -1,9 +1,7 @@
 package com.example.paint00;
 
 import javafx.geometry.Insets;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 
@@ -25,12 +23,12 @@ public class ToolBoxTop {
 
     static String selectedTool;
 
-    public static ColorPicker getColorPicker() {
-        return colorPicker;
+    public static Color getColorPicker() {
+        return colorPicker.getValue();
     }
 
-    public static Slider getBrushSize() {
-        return brushSize;
+    public static double getBrushSize() {
+        return brushSize.getValue();
     }
 
     public static String getSelectedTool() {
@@ -40,8 +38,7 @@ public class ToolBoxTop {
     }
 
 
-    ToolBoxTop(CanvasPane canvas){
-        GraphicsContext gc = canvas.gc;
+    ToolBoxTop(){
         toggleGroup.getToggles().addAll(pen,eraser,drawLine,drawSquare,drawCircle,drawRect,drawEllipse);
         colorPicker.setValue(Color.BLACK);
 
@@ -58,40 +55,5 @@ public class ToolBoxTop {
         if (pen.isSelected()){selectedTool = "pen";}
         else if (eraser.isSelected()) {selectedTool = "eraser";}
         else selectedTool="none";
-
-        canvas.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
-            //gc.setLineWidth(brushSize.getValue());
-            if (eraser.isSelected()){
-                gc.setStroke(Color.WHITE);
-                gc.setLineWidth(brushSize.getValue());
-                gc.beginPath();
-                gc.moveTo(event.getX(), event.getY());
-                gc.stroke();
-            }
-            else if (pen.isSelected()){
-                gc.setStroke(colorPicker.getValue());
-                gc.setLineWidth(brushSize.getValue());
-                gc.beginPath();
-                gc.moveTo(event.getX(), event.getY());
-                gc.stroke();
-            }
-
-        });
-
-        canvas.addEventHandler(MouseEvent.MOUSE_DRAGGED,
-                event -> {
-                    if (pen.isSelected()){
-                        gc.lineTo(event.getX(), event.getY());
-                        gc.stroke();
-                    }
-                    else if(eraser.isSelected()){
-                        gc.lineTo(event.getX(), event.getY());
-                        gc.stroke();
-                    }
-                });
-
-        canvas.addEventHandler(MouseEvent.MOUSE_RELEASED, event -> {
-
-        });
     }
 }
