@@ -4,6 +4,8 @@ import javafx.application.Application;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
@@ -11,6 +13,7 @@ import javafx.stage.Stage;
 
 public class Main extends Application {
     private static Stage myStage;
+    static TabPane tabPane;
 
     @Override
     public void start(Stage primaryStage) {
@@ -23,23 +26,26 @@ public class Main extends Application {
         primaryStage.setY(screenBounds.getMinY());
         VBox layout = new VBox(7);// create a vbox with 7 spacing between each child
 
-        CanvasPane canvas= new CanvasPane(); // create the canvas to paint on
-
-//        TabPane tabPane = new TabPane(); // create a tab pane
-//
-//        Tab tab1 = new Tab();
-
         ScrollPane sp = new ScrollPane();
 
+        tabPane = new TabPane(); // create a tab pane
+
+        TabPlus tab1 = new TabPlus();
+
+        tabPane.getTabs().addAll(tab1, newTabButton(tabPane));
+
+        tab1.setContent(sp);
+        CanvasPane canvas= new CanvasPane(); // create the canvas to paint on
+
+        ToolBoxTop toolBoxTop = new ToolBoxTop(canvas);
         // Menu bar
         AppMenu topMenu = new AppMenu(canvas);
 
-        ToolBoxTop toolBoxTop = new ToolBoxTop(canvas);
 
         layout.getChildren().add(topMenu.menuBar);
         layout.getChildren().add(toolBoxTop.toolBoxTop);
         sp.setContent(canvas);
-        layout.getChildren().add(sp);
+        layout.getChildren().add(tabPane);
 
         Scene scene = new Scene(layout, 10000,1000);
         primaryStage.setScene(scene);
@@ -53,6 +59,24 @@ public class Main extends Application {
     public static void main(String[] args) {
         launch();
     }
+
+    private Tab newTabButton(TabPane tabPane) {
+        Tab addTab = new Tab("Create Tab");
+        addTab.setClosable(false);
+        tabPane.getSelectionModel().selectedItemProperty().addListener((observable, oldTab, newTab) -> {
+            if(newTab == addTab) {
+                tabPane.getTabs().add(tabPane.getTabs().size() - 1, new TabPlus()); // Adding new tab before the "button" tab
+                tabPane.getSelectionModel().select(tabPane.getTabs().size() - 2); // Selecting the tab before the button, which is the newly created one
+            }
+        });
+        return addTab;
+    }
+
+    // Getting the tab user is currently selected
+    public static TabPlus getActiveTab(){
+        return (TabPlus) tabPane.getSelectionModel().getSelectedItem();
+    }
+
 }
 
 
