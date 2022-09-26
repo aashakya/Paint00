@@ -1,6 +1,5 @@
 package com.example.paint00;
 
-import javafx.application.Platform;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Menu;
@@ -98,7 +97,7 @@ public class AppMenu{
 
             }
         });
-        closeApp.setOnAction(e-> Platform.exit());
+        closeApp.setOnAction(e-> DialogBox.unsavedAlert());
 
         openItem.setAccelerator(new KeyCodeCombination(KeyCode.O, KeyCombination.CONTROL_DOWN));
         saveItem.setAccelerator(new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN));

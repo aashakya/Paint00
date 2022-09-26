@@ -12,7 +12,7 @@ import javafx.stage.Stage;
 
 
 public class Main extends Application {
-    private static Stage myStage;
+    public static Stage myStage;
     static TabPane tabPane;
 
     @Override
@@ -77,6 +77,9 @@ public class Main extends Application {
         return (TabPlus) tabPane.getSelectionModel().getSelectedItem();
     }
 
+    public static void closeTab() {
+        Main.tabPane.getTabs().remove(Main.getActiveTab());
+    }
 }
 
 
