@@ -50,6 +50,7 @@ public class Main extends Application {
         Scene scene = new Scene(layout, 10000,1000);
         primaryStage.setScene(scene);
         primaryStage.show();
+        primaryStage.setOnCloseRequest(e-> DialogBox.unsavedAlert());
     }
 
     public static Stage getStage() {
