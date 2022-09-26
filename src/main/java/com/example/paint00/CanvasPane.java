@@ -46,8 +46,8 @@ public class CanvasPane extends myCanvas{
                 case ("dashedLine")->{
                     gc.setStroke(ToolBoxTop.getColorPicker());
                     gc.setLineWidth(ToolBoxTop.getBrushSize());
-                    gc.setLineDashes(10);
-                    gc.setLineDashOffset(10);
+                    gc.setLineDashes(ToolBoxTop.getBrushSize()*2);
+                    gc.setLineDashOffset(ToolBoxTop.getBrushSize()*2);
                 }
                 case ("grabColor")->{
                     ToolBoxTop.setColorPicker(this.getColor(x,y));
