@@ -12,10 +12,12 @@ public class ToolBoxTop {
     static ToggleButton pen = new ToggleButton("Pen");
     static ToggleButton eraser = new ToggleButton("Eraser");
     ToggleButton drawLine = new ToggleButton("Draw Line");
+    ToggleButton drawDashed = new ToggleButton("Draw Dashed Line");
     ToggleButton drawSquare = new ToggleButton("Draw Square");
     ToggleButton drawCircle = new ToggleButton("Draw Circle");
     ToggleButton drawRect = new ToggleButton("Draw Rectangle");
     ToggleButton drawEllipse = new ToggleButton("Draw ellipse");
+    ToggleButton grabColor = new ToggleButton("Grab Color");
     ToggleGroup toggleGroup = new ToggleGroup();
     TextField canvasWidth = new TextField();
 
@@ -25,6 +27,10 @@ public class ToolBoxTop {
 
     public static Color getColorPicker() {
         return colorPicker.getValue();
+    }
+
+    public static void setColorPicker(Color color) {
+        ToolBoxTop.colorPicker.setValue(color);
     }
 
     public static double getBrushSize() {
@@ -37,7 +43,7 @@ public class ToolBoxTop {
     }
 
     ToolBoxTop(){
-        toggleGroup.getToggles().addAll(pen,eraser,drawLine,drawSquare,drawCircle,drawRect,drawEllipse);
+        toggleGroup.getToggles().addAll(pen,eraser,drawLine,drawDashed,drawSquare,drawCircle,drawRect,drawEllipse,grabColor);
         colorPicker.setValue(Color.BLACK);
 
         toolBoxTop.setPadding(new Insets(15, 12, 15, 12));
@@ -48,17 +54,18 @@ public class ToolBoxTop {
         brushSize.setBlockIncrement(10f);
 
         canvasWidth.setPromptText("Enter width");
-        toolBoxTop.getChildren().addAll(colorPicker,brushSize,canvasWidth,pen,eraser,drawLine,drawSquare,drawCircle,drawRect,drawEllipse);
-
+        toolBoxTop.getChildren().addAll(colorPicker,brushSize,canvasWidth,pen,eraser,drawLine,drawDashed,drawSquare,drawCircle,drawRect,drawEllipse,grabColor);
 
         toggleGroup.selectedToggleProperty().addListener((observable) -> {
             if (pen.isSelected()){selectedTool = "pen";}
             else if (eraser.isSelected()) {selectedTool = "eraser";}
             else if (drawLine.isSelected()){selectedTool="line";}
+            else if (drawDashed.isSelected()){selectedTool="dashedLine";}
             else if (drawRect.isSelected()) {selectedTool="rect";}
             else if (drawSquare.isSelected()) {selectedTool="square";}
             else if (drawCircle.isSelected()) {selectedTool="circle";}
             else if (drawEllipse.isSelected()) {selectedTool="ellipse";}
+            else if (grabColor.isSelected()){selectedTool="grabColor";}
             else selectedTool="none";
         });
 

@@ -17,14 +17,14 @@ public class CanvasPane extends myCanvas{
             y = event.getY();
             gc.setFill(ToolBoxTop.getColorPicker());
             switch (ToolBoxTop.getSelectedTool()) {
-                case ("eraser") -> {
+                case ("eraser")->{
                     gc.setStroke(Color.WHITE);
                     gc.setLineWidth(ToolBoxTop.getBrushSize());
                     gc.beginPath();
                     gc.moveTo(event.getX(), event.getY());
                     gc.stroke();
                 }
-                case ("pen") -> {
+                case ("pen")->{
                     gc.setStroke(ToolBoxTop.getColorPicker());
                     gc.setLineWidth(ToolBoxTop.getBrushSize());
                     gc.beginPath();
@@ -32,10 +32,8 @@ public class CanvasPane extends myCanvas{
                     gc.stroke();
                 }
                 case ("rect")->{
-                    //gc.setFill(ToolBoxTop.getColorPicker());
                     this.drawRect(x,y,x,y);}
                 case ("square")->{
-                    //gc.setFill(ToolBoxTop.getColorPicker());
                     this.drawSquare(x,y,x,y);}
                 case ("ellipse")->{
                     this.drawEllipse(x,y,x,y);}
@@ -44,6 +42,15 @@ public class CanvasPane extends myCanvas{
                 case ("line")->{
                     gc.setStroke(ToolBoxTop.getColorPicker());
                     gc.setLineWidth(ToolBoxTop.getBrushSize());
+                }
+                case ("dashedLine")->{
+                    gc.setStroke(ToolBoxTop.getColorPicker());
+                    gc.setLineWidth(ToolBoxTop.getBrushSize());
+                    gc.setLineDashes(10);
+                    gc.setLineDashOffset(10);
+                }
+                case ("grabColor")->{
+                    ToolBoxTop.setColorPicker(this.getColor(x,y));
                 }
                 default -> {
                 }
@@ -65,12 +72,19 @@ public class CanvasPane extends myCanvas{
                             this.drawEllipse(x,y,event.getX(),event.getY());}
                         case ("circle")->{
                             this.drawCircle(x,y,event.getX(),event.getY());}
+                        case ("grabColor")->{
+                            ToolBoxTop.setColorPicker(this.getColor(event.getX(),event.getY()));
+                        }
                         default -> {}
                     }
                 });
 
         this.addEventHandler(MouseEvent.MOUSE_RELEASED, event -> {
             if(ToolBoxTop.getSelectedTool()=="line"){
+                gc.strokeLine(x,y,event.getX(),event.getY());
+            }
+            else if (ToolBoxTop.getSelectedTool()=="dashedLine"){
+                System.out.println(gc.getLineDashes().toString());
                 gc.strokeLine(x,y,event.getX(),event.getY());
             }
         });
