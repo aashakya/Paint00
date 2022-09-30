@@ -6,7 +6,7 @@ import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
-import javafx.scene.layout.HBox;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.paint.Color;
 
 public class ToolBoxTop {
@@ -24,13 +24,18 @@ public class ToolBoxTop {
     ToggleButton drawRect = new ToggleButton("Draw Rectangle");
     ToggleButton drawEllipse = new ToggleButton("Draw ellipse");
     ToggleButton grabColor = new ToggleButton("Grab color");
+    ToggleButton drawPolygon = new ToggleButton("Draw Polygon");
+
+    ToggleButton drawPent = new ToggleButton("Draw Pentagon");
     ToggleGroup toggleGroup = new ToggleGroup();
     TextField canvasWidth = new TextField();
     TextField canvasHeight = new TextField();
+    static TextField sides = new TextField();
+    static int sideNo = 3;
     ToggleButton resize = new ToggleButton("Resize");
 
     CanvasPane canvas1;
-    HBox toolBoxTop = new HBox();
+    FlowPane toolBoxTop = new FlowPane();
 
     static String selectedTool;
 
@@ -51,12 +56,20 @@ public class ToolBoxTop {
         else return "None";
     }
 
+    public static int getSizeNo(){
+        try{
+        sideNo = Integer.parseInt(sides.getText().toString());}
+        catch (Exception e){}
+        return sideNo;
+    }
+
     ToolBoxTop(){
-        toggleGroup.getToggles().addAll(pen,eraser,drawLine,drawDashed,drawSquare,drawCircle,drawRect,drawEllipse,grabColor);
+        toggleGroup.getToggles().addAll(pen,eraser,drawLine,drawDashed,drawSquare,drawCircle,drawRect,drawEllipse,
+                grabColor,drawPolygon, drawPent);
         colorPicker.setValue(Color.BLACK);
 
         toolBoxTop.setPadding(new Insets(15, 12, 15, 12));
-        toolBoxTop.setSpacing(10);
+        toolBoxTop.setHgap(10);
 
         brushSize.setShowTickLabels(true);
         brushSize.setMajorTickUnit(10f);
@@ -66,8 +79,11 @@ public class ToolBoxTop {
         canvasWidth.setPromptText("Width");
         canvasHeight.setPrefWidth(70);
         canvasHeight.setPromptText("Height");
+        sides.setPrefWidth(90);
+        sides.setPromptText("No. of sides");
         canvas1 = new CanvasPane();
-        toolBoxTop.getChildren().addAll(colorPicker,brushSize,canvasWidth,canvasHeight,resize,pen,eraser,drawLine,drawDashed,drawSquare,drawCircle,drawRect,drawEllipse,grabColor);
+        toolBoxTop.getChildren().addAll(colorPicker,brushSize,canvasWidth,canvasHeight,resize,pen,eraser,drawLine,
+                drawDashed,drawSquare,drawCircle,drawRect,drawEllipse,grabColor,sides,drawPolygon, drawPent);
 
         toggleGroup.selectedToggleProperty().addListener((observable) -> {
             if (pen.isSelected()){selectedTool = "pen";}
@@ -79,21 +95,22 @@ public class ToolBoxTop {
             else if (drawCircle.isSelected()) {selectedTool="circle";}
             else if (drawEllipse.isSelected()) {selectedTool="ellipse";}
             else if (grabColor.isSelected()){selectedTool="grabColor";}
+            else if (drawPolygon.isSelected()){selectedTool="drawPolygon";}
+            else if (drawPent.isSelected()){selectedTool="drawPent";}
             else selectedTool="none";
         });
+
         // On clicking resize, change canvas size
         resize.setOnAction(e->{
             resize.setSelected(false);
             try{
                 if (canvasHeight != null && canvasWidth != null){
-                    TabPlus.getCanvasPane().resize(Double.parseDouble(canvasWidth.getText()),Double.parseDouble(canvasHeight.getText()));
+                    TabPlus.getCanvasPane().resize(Double.parseDouble(canvasWidth.getText()),Double.
+                            parseDouble(canvasHeight.getText()));
                 }
             }
             catch (Exception ece){}
         });
 
-//        canvasWidth.textProperty().addListener((observable, oldValue, newValue) -> {
-////            CanvasPane.setWidth(Double.parseDouble(canvasWidth.getText()));
-//        });
     }
 }

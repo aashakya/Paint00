@@ -43,11 +43,16 @@ public class myCanvas extends Canvas {
         gc.fillOval(x1-r, y1-r, 2*r, 2*r);
     }
 
-    public void drawLine(double x1, double y1, double x2, double y2){
-        line.setStartX(x1);
-        line.setStartY(y1);
-        line.setEndX(x2);
-        line.setEndY(y2);
+    public void drawPolygon(double x1, double y1, double x2, double y2, int n){
+        double[] xPoints = new double[n];
+        double[] yPoints = new double[n];
+        double radius = Math.sqrt(Math.pow((x1 - x2), 2) + Math.pow((y1 - y2), 2));
+        double startAngle = Math.atan2(y2 - y1, x2 - x1);
+        for(int i = 0; i < n; i++){
+            xPoints[i] = x1 + (radius * Math.cos(((2*Math.PI*i)/n) + startAngle));
+            yPoints[i] = y1 + (radius * Math.sin(((2*Math.PI*i)/n) + startAngle));
+        }
+        this.gc.fillPolygon(xPoints, yPoints, n);
     }
 
     public void drawEllipse(double x1, double y1, double x2, double y2){

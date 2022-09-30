@@ -72,6 +72,12 @@ public class CanvasPane extends myCanvas{
                 case ("grabColor")->{
                     ToolBoxTop.setColorPicker(this.getColor(x,y));
                 }
+                case ("drawPolygon")->{
+                    this.drawPolygon(x,y,x,y, ToolBoxTop.getSizeNo());
+                }
+                case ("drawPent")->{
+                    this.drawPolygon(x,y,x,y,5);
+                }
                 default -> {
                 }
             }
@@ -102,6 +108,12 @@ public class CanvasPane extends myCanvas{
                         }
                         case ("grabColor")->{
                             ToolBoxTop.setColorPicker(this.getColor(event.getX(),event.getY()));
+                        }
+                        case ("drawPolygon")->{
+                            this.drawPolygon(x,y,event.getX(),event.getY(),ToolBoxTop.getSizeNo());
+                        }
+                        case ("drawPent")->{
+                            this.drawPolygon(x,y,event.getX(),event.getY(),5);
                         }
                         default -> {}
                     }
