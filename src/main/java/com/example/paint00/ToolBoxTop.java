@@ -1,11 +1,13 @@
 package com.example.paint00;
 
 import javafx.geometry.Insets;
-import javafx.scene.control.*;
+import javafx.scene.control.ColorPicker;
+import javafx.scene.control.Slider;
+import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleButton;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
-
-import javax.imageio.ImageIO;
 
 public class ToolBoxTop {
 
@@ -21,7 +23,7 @@ public class ToolBoxTop {
     ToggleButton drawCircle = new ToggleButton("Draw Circle");
     ToggleButton drawRect = new ToggleButton("Draw Rectangle");
     ToggleButton drawEllipse = new ToggleButton("Draw ellipse");
-    ToggleButton grabColor = new ToggleButton("Grab Color");
+    ToggleButton grabColor = new ToggleButton("Grab color");
     ToggleGroup toggleGroup = new ToggleGroup();
     TextField canvasWidth = new TextField();
     TextField canvasHeight = new TextField();

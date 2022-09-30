@@ -59,4 +59,18 @@ public class TabPlus extends Tab {
         return canvasPane;
     }
 
+    public void undo() {
+        TabPlus.canvasPane.undo();
+    }
+
+    public void redo() {
+        TabPlus.canvasPane.redo();
+    }
+
+    public void clearCanvas() {// to clear the canvas
+        canvasPane.updateStack(); // updating stack for undo/redo purpose
+        // clearing canvas
+        TabPlus.canvasPane.gc.clearRect(0,0,canvasPane.getWidth(), canvasPane.getHeight());
+        canvasPane.initDraw(canvasPane.gc, canvasPane.getWidth(),canvasPane.getHeight()); // bg-color to white
+    }
 }

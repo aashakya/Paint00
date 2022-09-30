@@ -20,12 +20,11 @@ public class AppMenu{
     String nameOfFile = "Untitled"; // to save file
     String[] ext = new String[1];
     File saveFile;
-
     AppMenu(){
         GraphicsContext gc = TabPlus.canvasPane.gc;
-        CanvasPane canvas = TabPlus.canvasPane;
         //create menu
         Menu fileMenu = new Menu("File");
+        Menu optionsMenu = new Menu("Options");
         Menu helpMenu = new Menu("Help");
         
         //crete menu items
@@ -34,18 +33,25 @@ public class AppMenu{
         MenuItem saveAsItem = new MenuItem("Save As");
         MenuItem openItem = new MenuItem("Open Image");
         MenuItem closeApp = new MenuItem("Close");
-        
+
+        // For Options
+        MenuItem undoOpt = new MenuItem("Undo");
+        MenuItem redoOpt = new MenuItem("Redo");
+        MenuItem clearCanvas = new MenuItem("Clear Canvas");
+
         // For Help
         MenuItem helpItem = new MenuItem("Help");
         MenuItem aboutItem= new MenuItem("About");
         //add menu item to menu
         //for file menu items
         fileMenu.getItems().addAll(saveItem,saveAsItem,openItem,closeApp);
+        //for option menu items
+        optionsMenu.getItems().addAll(undoOpt,redoOpt,clearCanvas);
         //for help menu items
         helpMenu.getItems().addAll(helpItem,aboutItem);
 
         //add menu to the menu bar
-        menuBar.getMenus().addAll(fileMenu,helpMenu);
+        menuBar.getMenus().addAll(fileMenu,optionsMenu,helpMenu);
         // for opening the file
         FileChooser fileChooser = new FileChooser();
         openItem.setOnAction(e -> {
@@ -68,6 +74,10 @@ public class AppMenu{
         saveAsItem.setOnAction(e -> saveAsAction());
         saveItem.setOnAction(e -> saveAction());
         closeApp.setOnAction(e -> DialogBox.unsavedAlert());
+
+        undoOpt.setOnAction(e -> Main.getActiveTab().undo());
+        redoOpt.setOnAction(e -> Main.getActiveTab().redo());
+        clearCanvas.setOnAction(e -> DialogBox.clearCAlert());
 
         openItem.setAccelerator(new KeyCodeCombination(KeyCode.O, KeyCombination.CONTROL_DOWN));
         saveItem.setAccelerator(new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN));

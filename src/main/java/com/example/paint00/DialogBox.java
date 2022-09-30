@@ -32,4 +32,26 @@ public class DialogBox {
             Main.myStage.close();
         }
     }
+
+    public static void clearCAlert(){
+        ButtonType[] buttons = {new ButtonType("Yes"), new ButtonType("No")};
+        Alert unsavedChanges = new Alert(Alert.AlertType.WARNING,
+                "Are you sure you want to clear canvas",
+                buttons[0], buttons[1]);
+        unsavedChanges.setTitle("Clear Canvas ???");
+        ButtonType selectedBtn = unsavedChanges.showAndWait().get();
+        appMenu = new AppMenu();
+        //Save
+        if(selectedBtn == buttons[0]){
+            Main.getActiveTab().clearCanvas();
+        }
+        //Save as
+        else if(selectedBtn == buttons[1]){
+            appMenu.saveAsAction();
+        }
+        //Close tab
+        else if(selectedBtn == buttons[3]){
+            Main.closeTab();
+        }
+    }
 }
