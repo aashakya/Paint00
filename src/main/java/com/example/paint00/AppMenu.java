@@ -2,9 +2,7 @@ package com.example.paint00;
 
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.Menu;
-import javafx.scene.control.MenuBar;
-import javafx.scene.control.MenuItem;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.WritableImage;
 import javafx.scene.input.KeyCode;
@@ -23,9 +21,10 @@ public class AppMenu{
     String[] ext = new String[1];
     File saveFile;
 
-    AppMenu(CanvasPane canvas){
+    AppMenu(){
+        GraphicsContext gc = TabPlus.canvasPane.gc;
+        CanvasPane canvas = TabPlus.canvasPane;
         //create menu
-        GraphicsContext gc = canvas.gc;
         Menu fileMenu = new Menu("File");
         Menu helpMenu = new Menu("Help");
         
@@ -61,49 +60,48 @@ public class AppMenu{
             if (insImg != null) {
                 Image img = new Image(insImg.toURI().toString());
                 saveFile = insImg;
-                canvas.setWidth(img.getWidth());
-                canvas.setHeight(img.getHeight());
+                TabPlus.canvasPane.setWidth(img.getWidth());
+                TabPlus.canvasPane.setHeight(img.getHeight());
                 gc.drawImage(img, 0,0);
             }
         });
-        saveAsItem.setOnAction(e -> {
-            FileChooser saveImgAs = new FileChooser();
-            saveImgAs.setTitle("Save image as");
-            saveImgAs.getExtensionFilters().addAll(
-                    new FileChooser.ExtensionFilter("PNG file","*.png"),
-                    new FileChooser.ExtensionFilter("PDF file","*.pdf"),
-                    new FileChooser.ExtensionFilter("BMP file","*.bmp"));
-            File savedImg = saveImgAs.showSaveDialog(null);
-            nameOfFile = savedImg.getName();
-            ext[0] = nameOfFile.substring(1 + nameOfFile.lastIndexOf(".")).toLowerCase();
-            try {           //attempt to make a save file from the inserted image
-                WritableImage writableImage = new WritableImage((int) canvas.getWidth(), (int) canvas.getHeight());
-                canvas.snapshot(null,writableImage);
-                ImageIO.write(SwingFXUtils.fromFXImage(writableImage,null), ext[0], savedImg);
-            } catch (IOException o) {   //If the above line breaks, throw an exception
-                throw new RuntimeException(o);
-            }
-            saveFile = savedImg;
-        });
-        saveItem.setOnAction(e -> {
-            try {           //attempt to make a save file from the inserted image
-                WritableImage writableImage = new WritableImage((int) canvas.getWidth(), (int) canvas.getHeight());
-                canvas.snapshot(null,writableImage);
-                RenderedImage ri = SwingFXUtils.fromFXImage(writableImage,null);
-                ImageIO.write(ri, "png", saveFile);
-                System.out.println(new File(nameOfFile));
-
-            } catch (IOException o) {   //If the above line breaks, throw an exception
-
-            }
-        });
-        closeApp.setOnAction(e-> DialogBox.unsavedAlert());
+        saveAsItem.setOnAction(e -> saveAsAction());
+        saveItem.setOnAction(e -> saveAction());
+        closeApp.setOnAction(e -> DialogBox.unsavedAlert());
 
         openItem.setAccelerator(new KeyCodeCombination(KeyCode.O, KeyCombination.CONTROL_DOWN));
         saveItem.setAccelerator(new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN));
         closeApp.setAccelerator(new KeyCodeCombination(KeyCode.Q, KeyCombination.CONTROL_DOWN));
         saveAsItem.setAccelerator(new KeyCodeCombination(KeyCode.S, KeyCombination.SHIFT_DOWN, KeyCombination.CONTROL_DOWN));
     }
+    public void saveAction(){
+        try {           //attempt to make a save file from the inserted image
+            WritableImage writableImage = new WritableImage((int) TabPlus.canvasPane.getWidth(), (int) TabPlus.canvasPane.getHeight());
+            TabPlus.canvasPane.snapshot(null,writableImage);
+            RenderedImage ri = SwingFXUtils.fromFXImage(writableImage,null);
+            ImageIO.write(ri, "png", saveFile);
 
+        } catch (IOException o) {   //If the above line breaks, throw an exception
+        }
+    }
 
+    public void saveAsAction(){
+        FileChooser saveImgAs = new FileChooser();
+        saveImgAs.setTitle("Save image as");
+        saveImgAs.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("PNG file","*.png"),
+                new FileChooser.ExtensionFilter("PDF file","*.pdf"),
+                new FileChooser.ExtensionFilter("BMP file","*.bmp"));
+        File savedImg = saveImgAs.showSaveDialog(null);
+        nameOfFile = savedImg.getName();
+        ext[0] = nameOfFile.substring(1 + nameOfFile.lastIndexOf(".")).toLowerCase();
+        try {           //attempt to make a save file from the inserted image
+            WritableImage writableImage = new WritableImage((int) TabPlus.canvasPane.getWidth(), (int) TabPlus.canvasPane.getHeight());
+            TabPlus.canvasPane.snapshot(null,writableImage);
+            ImageIO.write(SwingFXUtils.fromFXImage(writableImage,null), ext[0], savedImg);
+        } catch (IOException o) {   //If the above line breaks, throw an exception
+            throw new RuntimeException(o);
+        }
+        saveFile = savedImg;
+    }
 }

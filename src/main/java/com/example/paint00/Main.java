@@ -3,7 +3,6 @@ package com.example.paint00;
 import javafx.application.Application;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.layout.VBox;
@@ -14,6 +13,8 @@ import javafx.stage.Stage;
 public class Main extends Application {
     public static Stage myStage;
     static TabPane tabPane;
+
+    static TabPlus tab1;
 
     @Override
     public void start(Stage primaryStage) {
@@ -26,25 +27,19 @@ public class Main extends Application {
         primaryStage.setY(screenBounds.getMinY());
         VBox layout = new VBox(7);// create a vbox with 7 spacing between each child
 
-        ScrollPane sp = new ScrollPane();
-
         tabPane = new TabPane(); // create a tab pane
 
-        TabPlus tab1 = new TabPlus();
+        tab1 = new TabPlus();
 
         tabPane.getTabs().addAll(tab1, newTabButton(tabPane));
 
-        tab1.setContent(sp);
-        CanvasPane canvas= new CanvasPane(); // create the canvas to paint on
-
         ToolBoxTop toolBoxTop = new ToolBoxTop();
         // Menu bar
-        AppMenu topMenu = new AppMenu(canvas);
+        AppMenu topMenu = new AppMenu();
 
 
         layout.getChildren().add(topMenu.menuBar);
         layout.getChildren().add(toolBoxTop.toolBoxTop);
-        sp.setContent(canvas);
         layout.getChildren().add(tabPane);
 
         Scene scene = new Scene(layout, 10000,1000);
@@ -82,6 +77,3 @@ public class Main extends Application {
         Main.tabPane.getTabs().remove(Main.getActiveTab());
     }
 }
-
-
-

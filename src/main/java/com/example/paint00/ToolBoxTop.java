@@ -5,7 +5,11 @@ import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 
+import javax.imageio.ImageIO;
+
 public class ToolBoxTop {
+
+    // Creating the tools to use
     static ColorPicker colorPicker = new ColorPicker();
     static Slider brushSize = new Slider(1,100, 10);
 
@@ -20,7 +24,10 @@ public class ToolBoxTop {
     ToggleButton grabColor = new ToggleButton("Grab Color");
     ToggleGroup toggleGroup = new ToggleGroup();
     TextField canvasWidth = new TextField();
+    TextField canvasHeight = new TextField();
+    ToggleButton resize = new ToggleButton("Resize");
 
+    CanvasPane canvas1;
     HBox toolBoxTop = new HBox();
 
     static String selectedTool;
@@ -53,8 +60,12 @@ public class ToolBoxTop {
         brushSize.setMajorTickUnit(10f);
         brushSize.setBlockIncrement(10f);
 
-        canvasWidth.setPromptText("Enter width");
-        toolBoxTop.getChildren().addAll(colorPicker,brushSize,canvasWidth,pen,eraser,drawLine,drawDashed,drawSquare,drawCircle,drawRect,drawEllipse,grabColor);
+        canvasWidth.setPrefWidth(70);
+        canvasWidth.setPromptText("Width");
+        canvasHeight.setPrefWidth(70);
+        canvasHeight.setPromptText("Height");
+        canvas1 = new CanvasPane();
+        toolBoxTop.getChildren().addAll(colorPicker,brushSize,canvasWidth,canvasHeight,resize,pen,eraser,drawLine,drawDashed,drawSquare,drawCircle,drawRect,drawEllipse,grabColor);
 
         toggleGroup.selectedToggleProperty().addListener((observable) -> {
             if (pen.isSelected()){selectedTool = "pen";}
@@ -68,9 +79,19 @@ public class ToolBoxTop {
             else if (grabColor.isSelected()){selectedTool="grabColor";}
             else selectedTool="none";
         });
-
-        canvasWidth.textProperty().addListener((observable, oldValue, newValue) -> {
-//            CanvasPane.setWidth(Double.parseDouble(canvasWidth.getText()));
+        // On clicking resize, change canvas size
+        resize.setOnAction(e->{
+            resize.setSelected(false);
+            try{
+                if (canvasHeight != null && canvasWidth != null){
+                    TabPlus.getCanvasPane().resize(Double.parseDouble(canvasWidth.getText()),Double.parseDouble(canvasHeight.getText()));
+                }
+            }
+            catch (Exception ece){}
         });
+
+//        canvasWidth.textProperty().addListener((observable, oldValue, newValue) -> {
+////            CanvasPane.setWidth(Double.parseDouble(canvasWidth.getText()));
+//        });
     }
 }

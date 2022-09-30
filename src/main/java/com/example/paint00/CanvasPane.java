@@ -5,6 +5,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 
 public class CanvasPane extends myCanvas{
+    //default width and height of image
     static double width = 900;
     static double height = 700;
     double x,y;
@@ -84,8 +85,9 @@ public class CanvasPane extends myCanvas{
                 gc.strokeLine(x,y,event.getX(),event.getY());
             }
             else if (ToolBoxTop.getSelectedTool()=="dashedLine"){
-                System.out.println(gc.getLineDashes().toString());
                 gc.strokeLine(x,y,event.getX(),event.getY());
+                gc.setLineDashes(null);
+                gc.setLineDashOffset(0);
             }
         });
 
@@ -116,7 +118,6 @@ public class CanvasPane extends myCanvas{
         return 1D;
     }
 
-    @Override
     public void resize(double width, double height) {
         this.setWidth(width);
         this.setHeight(height);
