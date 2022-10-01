@@ -33,7 +33,7 @@ public class ToolBoxTop {
     static ToggleButton pen = new ToggleButton("Pen");
     static ToggleButton eraser = new ToggleButton("Eraser");
     ToggleButton drawLine = new ToggleButton("Draw Line");
-    ToggleButton drawDashed = new ToggleButton("Draw Dashed Line",imageView);
+    ToggleButton drawDashed = new ToggleButton("Draw Dashed Line");
     ToggleButton drawSquare = new ToggleButton("Draw Square");
     ToggleButton drawCircle = new ToggleButton("Draw Circle");
     ToggleButton drawRect = new ToggleButton("Draw Rectangle");
@@ -99,7 +99,8 @@ public class ToolBoxTop {
         sides.setPromptText("No. of sides");
         canvas1 = new CanvasPane();
         toolBoxTop.getChildren().addAll(colorPicker,brushSize,canvasWidth,canvasHeight,resize,pen,eraser,drawLine,
-                drawDashed,drawSquare,drawCircle,drawRect,drawEllipse,grabColor,sides,drawPolygon, drawPent);
+                drawDashed,drawSquare,drawCircle,drawRect,drawEllipse,grabColor,sides,drawPolygon, drawPent,
+                undo, redo);
 
         toggleGroup.selectedToggleProperty().addListener((observable) -> {
             if (pen.isSelected()){selectedTool = "pen";}
@@ -129,7 +130,13 @@ public class ToolBoxTop {
         });
 
         // On clicking the undo button
-        undo.setOnAction(e -> Main.getActiveTab().undo());
-        redo.setOnAction(e -> Main.getActiveTab().redo());
+        undo.setOnAction(e -> {
+            Main.getActiveTab().undo(); // call the undo function
+            undo.setSelected(false); // deselect undo
+        });
+        redo.setOnAction(e -> {
+            Main.getActiveTab().redo(); // call the redo function
+            redo.setSelected(false); // deselect redo
+        });
     }
 }
