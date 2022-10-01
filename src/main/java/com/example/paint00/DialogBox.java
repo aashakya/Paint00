@@ -47,11 +47,6 @@ public class DialogBox {
         }
         //Save as
         else if(selectedBtn == buttons[1]){
-            appMenu.saveAsAction();
-        }
-        //Close tab
-        else if(selectedBtn == buttons[3]){
-            Main.closeTab();
         }
     }
 }

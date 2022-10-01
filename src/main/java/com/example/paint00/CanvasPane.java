@@ -43,31 +43,25 @@ public class CanvasPane extends myCanvas{
                 }
                 case ("rect")->{
                     this.drawRect(x,y,x,y);
-                    this.updateStack();
                 }
                 case ("square")->{
                     this.drawSquare(x,y,x,y);
-                    this.updateStack();
                 }
                 case ("ellipse")->{
                     this.drawEllipse(x,y,x,y);
-                    this.updateStack();
                 }
                 case ("circle")->{
                     this.drawCircle(x,y,x,y);
-                    this.updateStack();
                 }
                 case ("line")->{
                     gc.setStroke(ToolBoxTop.getColorPicker());
                     gc.setLineWidth(ToolBoxTop.getBrushSize());
-                    this.updateStack();
                 }
                 case ("dashedLine")->{
                     gc.setStroke(ToolBoxTop.getColorPicker());
                     gc.setLineWidth(ToolBoxTop.getBrushSize());
                     gc.setLineDashes(ToolBoxTop.getBrushSize()*2);
                     gc.setLineDashOffset(ToolBoxTop.getBrushSize()*2);
-                    this.updateStack();
                 }
                 case ("grabColor")->{
                     ToolBoxTop.setColorPicker(this.getColor(x,y));
@@ -91,29 +85,8 @@ public class CanvasPane extends myCanvas{
                             gc.lineTo(event.getX(), event.getY());
                             gc.stroke();
                         }
-                        case ("rect")->{
-                            this.drawRect(x,y,event.getX(),event.getY());
-                            this.updateStack();
-                        }
-                        case ("square")->{
-                            this.drawSquare(x,y,event.getX(),event.getY());
-                            this.updateStack();
-                        }
-                        case ("ellipse")->{
-                            this.drawEllipse(x,y,event.getX(),event.getY());
-                            this.updateStack();
-                        }
-                        case ("circle")->{
-                            this.drawCircle(x,y,event.getX(),event.getY());
-                        }
                         case ("grabColor")->{
                             ToolBoxTop.setColorPicker(this.getColor(event.getX(),event.getY()));
-                        }
-                        case ("drawPolygon")->{
-                            this.drawPolygon(x,y,event.getX(),event.getY(),ToolBoxTop.getSizeNo());
-                        }
-                        case ("drawPent")->{
-                            this.drawPolygon(x,y,event.getX(),event.getY(),5);
                         }
                         default -> {}
                     }
@@ -128,11 +101,47 @@ public class CanvasPane extends myCanvas{
                 gc.strokeLine(x,y,event.getX(),event.getY());
                 gc.setLineDashes(null);
                 gc.setLineDashOffset(0);
+                this.updateStack();
+            }
+            switch (ToolBoxTop.getSelectedTool()) {
+                case ("eraser"), ("pen") -> {}
+                case ("rect")->{
+                    this.drawRect(x,y,event.getX(),event.getY());
+                    this.updateStack();
+                }
+                case ("square")->{
+                    this.drawSquare(x,y,event.getX(),event.getY());
+                    this.updateStack();
+                }
+                case ("ellipse")->{
+                    this.drawEllipse(x,y,event.getX(),event.getY());
+                    this.updateStack();
+                }
+                case ("circle")->{
+                    this.drawCircle(x,y,event.getX(),event.getY());
+                    this.updateStack();
+                }
+                case ("grabColor")->{
+                    ToolBoxTop.setColorPicker(this.getColor(event.getX(),event.getY()));
+                    this.updateStack();
+                }
+                case ("drawPolygon")->{
+                    this.drawPolygon(x,y,event.getX(),event.getY(),ToolBoxTop.getSizeNo());
+                    this.updateStack();
+                }
+                case ("drawPent")->{
+                    this.drawPolygon(x,y,event.getX(),event.getY(),5);
+                    this.updateStack();
+                }
+                default -> {}
             }
         });
 
     }
 
+    /**
+     * Update the canvas stacks
+     */
     public void updateStack(){
         undoSteps.push(this.getRegion(0,0,this.getWidth(),this.getHeight()));
         redoSteps.clear();
@@ -202,8 +211,4 @@ public class CanvasPane extends myCanvas{
         gc.setFill(Color.WHITE);
         gc.fillRect(0, 0, canvasWidth, canvasHeight);
     }
-
-//    public static void setCanvasWidth(double width) {
-//        CanvasPane.resize(width,width);
-//    }
 }

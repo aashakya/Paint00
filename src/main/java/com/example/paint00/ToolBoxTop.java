@@ -6,11 +6,26 @@ import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.paint.Color;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 
 public class ToolBoxTop {
+    FileInputStream
+            input;
+    {
+        try {
+            input = new FileInputStream("/Users/apple/IdeaProjects/Paint00/src/main/java/com/example/paint00/Images/img.png");
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
+    Image image = new Image(input);
+    ImageView imageView = new ImageView(image);
     // Creating the tools to use
     static ColorPicker colorPicker = new ColorPicker();
     static Slider brushSize = new Slider(1,100, 10);
@@ -18,14 +33,13 @@ public class ToolBoxTop {
     static ToggleButton pen = new ToggleButton("Pen");
     static ToggleButton eraser = new ToggleButton("Eraser");
     ToggleButton drawLine = new ToggleButton("Draw Line");
-    ToggleButton drawDashed = new ToggleButton("Draw Dashed Line");
+    ToggleButton drawDashed = new ToggleButton("Draw Dashed Line",imageView);
     ToggleButton drawSquare = new ToggleButton("Draw Square");
     ToggleButton drawCircle = new ToggleButton("Draw Circle");
     ToggleButton drawRect = new ToggleButton("Draw Rectangle");
     ToggleButton drawEllipse = new ToggleButton("Draw ellipse");
     ToggleButton grabColor = new ToggleButton("Grab color");
     ToggleButton drawPolygon = new ToggleButton("Draw Polygon");
-
     ToggleButton drawPent = new ToggleButton("Draw Pentagon");
     ToggleGroup toggleGroup = new ToggleGroup();
     TextField canvasWidth = new TextField();
@@ -33,6 +47,8 @@ public class ToolBoxTop {
     static TextField sides = new TextField();
     static int sideNo = 3;
     ToggleButton resize = new ToggleButton("Resize");
+    ToggleButton undo = new ToggleButton("Undo");
+    ToggleButton redo = new ToggleButton("Redo");
 
     CanvasPane canvas1;
     FlowPane toolBoxTop = new FlowPane();
@@ -101,7 +117,7 @@ public class ToolBoxTop {
         });
 
         // On clicking resize, change canvas size
-        resize.setOnAction(e->{
+        resize.setOnAction(e -> {
             resize.setSelected(false);
             try{
                 if (canvasHeight != null && canvasWidth != null){
@@ -112,5 +128,8 @@ public class ToolBoxTop {
             catch (Exception ece){}
         });
 
+        // On clicking the undo button
+        undo.setOnAction(e -> Main.getActiveTab().undo());
+        redo.setOnAction(e -> Main.getActiveTab().redo());
     }
 }
