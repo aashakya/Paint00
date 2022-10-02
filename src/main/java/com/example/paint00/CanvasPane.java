@@ -6,6 +6,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 
 import javafx.geometry.Point2D;
+
 import java.util.Stack;
 
 public class CanvasPane extends myCanvas{
@@ -14,8 +15,8 @@ public class CanvasPane extends myCanvas{
     static double height = 700;
     private Image imagePiece = null;
     double x,y;
-    private Stack<Image> undoSteps; // Image stack for undo
-    private Stack<Image> redoSteps; // Image stack for redo
+    private final Stack<Image> undoSteps; // Image stack for undo
+    private final Stack<Image> redoSteps; // Image stack for redo
     private Point2D initialPoints; // for initial coordinates of portion of selected portion
     private String selectedTool;
     CanvasPane(){
@@ -46,18 +47,10 @@ public class CanvasPane extends myCanvas{
                     gc.moveTo(event.getX(), event.getY());
                     gc.stroke();
                 }
-                case ("rect")->{
-                    this.drawRect(x,y,x,y);
-                }
-                case ("square")->{
-                    this.drawSquare(x,y,x,y);
-                }
-                case ("ellipse")->{
-                    this.drawEllipse(x,y,x,y);
-                }
-                case ("circle")->{
-                    this.drawCircle(x,y,x,y);
-                }
+                case ("rect")-> this.drawRect(x,y,x,y);
+                case ("square")-> this.drawSquare(x,y,x,y);
+                case ("ellipse")-> this.drawEllipse(x,y,x,y);
+                case ("circle")-> this.drawCircle(x,y,x,y);
                 case ("line")->{
                     gc.setStroke(ToolBoxTop.getColorPicker());
                     gc.setLineWidth(ToolBoxTop.getBrushSize());
@@ -68,18 +61,10 @@ public class CanvasPane extends myCanvas{
                     gc.setLineDashes(ToolBoxTop.getBrushSize()*2);
                     gc.setLineDashOffset(ToolBoxTop.getBrushSize()*2);
                 }
-                case ("grabColor")->{
-                    ToolBoxTop.setColorPicker(this.getColor(x,y));
-                }
-                case ("drawPolygon")->{
-                    this.drawPolygon(x,y,x,y, ToolBoxTop.getSizeNo());
-                }
-                case ("drawPent")->{
-                    this.drawPolygon(x,y,x,y,5);
-                }
-                case ("selectMove"),("copyMove")->{
-                    initialPoints = new Point2D(x,y); // starting x,y of the canvas select tool
-                }
+                case ("grabColor")-> ToolBoxTop.setColorPicker(this.getColor(x,y));
+                case ("drawPolygon")-> this.drawPolygon(x,y,x,y, ToolBoxTop.getSizeNo());
+                case ("drawPent")-> this.drawPolygon(x,y,x,y,5);
+                case ("selectMove"),("copyMove")-> initialPoints = new Point2D(x,y); // starting x,y of the canvas select tool
                 default -> {
                 }
             }
@@ -93,26 +78,14 @@ public class CanvasPane extends myCanvas{
                             gc.lineTo(event.getX(), event.getY());
                             gc.stroke();
                         }
-                        case ("grabColor")->{
-                            ToolBoxTop.setColorPicker(this.getColor(event.getX(),event.getY()));
-                        }
+                        case ("grabColor")-> ToolBoxTop.setColorPicker(this.getColor(event.getX(),event.getY()));
                         default -> {}
                     }
                 });
 
         this.addEventHandler(MouseEvent.MOUSE_RELEASED, event -> {
-            if(selectedTool=="line"){
-                gc.strokeLine(x,y,event.getX(),event.getY());
-                this.updateStack();
-            }
-            else if (selectedTool=="dashedLine"){
-                gc.strokeLine(x,y,event.getX(),event.getY());
-                gc.setLineDashes(null);
-                gc.setLineDashOffset(0);
-                this.updateStack();
-            }
             switch (selectedTool) {
-                case ("eraser"), ("pen") -> {}
+                case ("eraser"), ("pen") -> this.updateStack();
                 case ("rect")->{
                     this.drawRect(x,y,event.getX(),event.getY());
                     this.updateStack();
@@ -127,6 +100,15 @@ public class CanvasPane extends myCanvas{
                 }
                 case ("circle")->{
                     this.drawCircle(x,y,event.getX(),event.getY());
+                    this.updateStack();
+                }
+                case ("line")->{gc.strokeLine(x,y,event.getX(),event.getY());
+                    this.updateStack();
+                }
+                case ("dashedLine")->{
+                    gc.strokeLine(x,y,event.getX(),event.getY());
+                    gc.setLineDashes(0);
+                    gc.setLineDashOffset(0);
                     this.updateStack();
                 }
                 case ("grabColor")->{
@@ -147,7 +129,7 @@ public class CanvasPane extends myCanvas{
                         // getting certain portion of the screen
                         imagePiece = this.getRegion(initialPoints.getX(), initialPoints.getY(), event.getX(), event.getY());
                         // setting the cut part of the image to white
-                        if (selectedTool == "selectMove")
+                        if (selectedTool.equals("selectMove"))
                         {
                             gc.setFill(Color.WHITE);
                             gc.fillRect(Math.min(initialPoints.getX(),event.getX()),
@@ -163,7 +145,7 @@ public class CanvasPane extends myCanvas{
                             event.getX(),
                             event.getY()
                     );
-                    this.updateStack(); // pushing the new canvas image to stack
+                    //this.updateStack(); // pushing the new canvas image to stack
                     //set the image back to null
                     imagePiece = null;
                 }

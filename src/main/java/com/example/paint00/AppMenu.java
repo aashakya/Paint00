@@ -1,7 +1,6 @@
 package com.example.paint00;
 
 import javafx.embed.swing.SwingFXUtils;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.WritableImage;
@@ -21,7 +20,6 @@ public class AppMenu{
     String[] ext = new String[1];
     File saveFile;
     AppMenu(){
-        GraphicsContext gc = TabPlus.canvasPane.gc;
         //create menu
         Menu fileMenu = new Menu("File");
         Menu optionsMenu = new Menu("Options");
@@ -68,7 +66,8 @@ public class AppMenu{
                 saveFile = insImg;
                 TabPlus.canvasPane.setWidth(img.getWidth());
                 TabPlus.canvasPane.setHeight(img.getHeight());
-                gc.drawImage(img, 0,0);
+                TabPlus.canvasPane.gc.drawImage(img, 0,0);
+                TabPlus.canvasPane.updateStack();
             }
         });
         saveAsItem.setOnAction(e -> saveAsAction());
