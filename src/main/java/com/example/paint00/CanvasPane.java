@@ -5,15 +5,19 @@ import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 
+import javafx.geometry.Point2D;
 import java.util.Stack;
 
 public class CanvasPane extends myCanvas{
     //default width and height of image
     static double width = 900;
     static double height = 700;
+    private Image imagePiece = null;
     double x,y;
     private Stack<Image> undoSteps; // Image stack for undo
     private Stack<Image> redoSteps; // Image stack for redo
+    private Point2D initialPoints; // for initial coordinates of portion of selected portion
+    private String selectedTool;
     CanvasPane(){
         super();
         undoSteps = new Stack<>();
@@ -26,7 +30,8 @@ public class CanvasPane extends myCanvas{
             x = event.getX();
             y = event.getY();
             gc.setFill(ToolBoxTop.getColorPicker());
-            switch (ToolBoxTop.getSelectedTool()) {
+            selectedTool = ToolBoxTop.getSelectedTool();
+            switch (selectedTool) {
                 case ("eraser")->{
                     gc.setStroke(Color.WHITE);
                     gc.setLineWidth(ToolBoxTop.getBrushSize());
@@ -72,6 +77,9 @@ public class CanvasPane extends myCanvas{
                 case ("drawPent")->{
                     this.drawPolygon(x,y,x,y,5);
                 }
+                case ("selectMove"),("copyMove")->{
+                    initialPoints = new Point2D(x,y); // starting x,y of the canvas select tool
+                }
                 default -> {
                 }
             }
@@ -80,7 +88,7 @@ public class CanvasPane extends myCanvas{
 
         this.addEventHandler(MouseEvent.MOUSE_DRAGGED,
                 event -> {
-                    switch (ToolBoxTop.getSelectedTool()) {
+                    switch (selectedTool) {
                         case ("eraser"), ("pen") -> {
                             gc.lineTo(event.getX(), event.getY());
                             gc.stroke();
@@ -93,17 +101,17 @@ public class CanvasPane extends myCanvas{
                 });
 
         this.addEventHandler(MouseEvent.MOUSE_RELEASED, event -> {
-            if(ToolBoxTop.getSelectedTool()=="line"){
+            if(selectedTool=="line"){
                 gc.strokeLine(x,y,event.getX(),event.getY());
                 this.updateStack();
             }
-            else if (ToolBoxTop.getSelectedTool()=="dashedLine"){
+            else if (selectedTool=="dashedLine"){
                 gc.strokeLine(x,y,event.getX(),event.getY());
                 gc.setLineDashes(null);
                 gc.setLineDashOffset(0);
                 this.updateStack();
             }
-            switch (ToolBoxTop.getSelectedTool()) {
+            switch (selectedTool) {
                 case ("eraser"), ("pen") -> {}
                 case ("rect")->{
                     this.drawRect(x,y,event.getX(),event.getY());
@@ -132,6 +140,32 @@ public class CanvasPane extends myCanvas{
                 case ("drawPent")->{
                     this.drawPolygon(x,y,event.getX(),event.getY(),5);
                     this.updateStack();
+                }
+                case ("selectMove"),("copyMove")->{ // for selecting portion of canvas
+                    if (imagePiece == null) { // if portion is not selected yet
+                        this.updateStack(); // adding canvas snapshot to stack before cutting the portion
+                        // getting certain portion of the screen
+                        imagePiece = this.getRegion(initialPoints.getX(), initialPoints.getY(), event.getX(), event.getY());
+                        // setting the cut part of the image to white
+                        if (selectedTool == "selectMove")
+                        {
+                            gc.setFill(Color.WHITE);
+                            gc.fillRect(Math.min(initialPoints.getX(),event.getX()),
+                                    Math.min(initialPoints.getY(),event.getY()),
+                                    Math.abs(event.getX() - initialPoints.getX()),
+                                    Math.abs(event.getY() - initialPoints.getY()));
+                        }
+                        return;
+                    }
+                    // if snapshot is already taken of certain portion of canvas
+                    this.gc.drawImage(
+                            imagePiece,
+                            event.getX(),
+                            event.getY()
+                    );
+                    this.updateStack(); // pushing the new canvas image to stack
+                    //set the image back to null
+                    imagePiece = null;
                 }
                 default -> {}
             }
@@ -183,6 +217,7 @@ public class CanvasPane extends myCanvas{
         this.setWidth(width);
         this.setHeight(height);
     }
+
     protected void initDraw(GraphicsContext gc, double canvasWidth, double canvasHeight){
         gc.setFill(Color.WHITE);
         gc.fillRect(0, 0, canvasWidth, canvasHeight);

@@ -44,6 +44,7 @@ public class DialogBox {
         //Save
         if(selectedBtn == buttons[0]){
             Main.getActiveTab().clearCanvas();
+            Main.getActiveTab().canvasPane.updateStack();
         }
         //Save as
         else if(selectedBtn == buttons[1]){

@@ -41,14 +41,16 @@ public class ToolBoxTop {
     ToggleButton grabColor = new ToggleButton("Grab color");
     ToggleButton drawPolygon = new ToggleButton("Draw Polygon");
     ToggleButton drawPent = new ToggleButton("Draw Pentagon");
+    ToggleButton selectMove = new ToggleButton("Select/Move");
+    ToggleButton copyMove = new ToggleButton("Copy/Paste");
+    ToggleButton resize = new ToggleButton("Resize");
+    ToggleButton undo = new ToggleButton("Undo");
+    ToggleButton redo = new ToggleButton("Redo");
     ToggleGroup toggleGroup = new ToggleGroup();
     TextField canvasWidth = new TextField();
     TextField canvasHeight = new TextField();
     static TextField sides = new TextField();
     static int sideNo = 3;
-    ToggleButton resize = new ToggleButton("Resize");
-    ToggleButton undo = new ToggleButton("Undo");
-    ToggleButton redo = new ToggleButton("Redo");
 
     CanvasPane canvas1;
     FlowPane toolBoxTop = new FlowPane();
@@ -81,7 +83,7 @@ public class ToolBoxTop {
 
     ToolBoxTop(){
         toggleGroup.getToggles().addAll(pen,eraser,drawLine,drawDashed,drawSquare,drawCircle,drawRect,drawEllipse,
-                grabColor,drawPolygon, drawPent);
+                grabColor,drawPolygon, drawPent, selectMove, copyMove);
         colorPicker.setValue(Color.BLACK);
 
         toolBoxTop.setPadding(new Insets(15, 12, 15, 12));
@@ -99,8 +101,8 @@ public class ToolBoxTop {
         sides.setPromptText("No. of sides");
         canvas1 = new CanvasPane();
         toolBoxTop.getChildren().addAll(colorPicker,brushSize,canvasWidth,canvasHeight,resize,pen,eraser,drawLine,
-                drawDashed,drawSquare,drawCircle,drawRect,drawEllipse,grabColor,sides,drawPolygon, drawPent,
-                undo, redo);
+                drawDashed,drawSquare,drawCircle,drawRect,drawEllipse,grabColor,sides,drawPolygon,drawPent,
+                undo,redo,selectMove,copyMove);
 
         toggleGroup.selectedToggleProperty().addListener((observable) -> {
             if (pen.isSelected()){selectedTool = "pen";}
@@ -114,6 +116,8 @@ public class ToolBoxTop {
             else if (grabColor.isSelected()){selectedTool="grabColor";}
             else if (drawPolygon.isSelected()){selectedTool="drawPolygon";}
             else if (drawPent.isSelected()){selectedTool="drawPent";}
+            else if (selectMove.isSelected()) {selectedTool="selectMove";}
+            else if (copyMove.isSelected()) {selectedTool="copyMove";}
             else selectedTool="none";
         });
 
