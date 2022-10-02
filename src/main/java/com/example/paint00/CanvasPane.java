@@ -6,6 +6,8 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 
 import javafx.geometry.Point2D;
+import javafx.scene.shape.StrokeLineCap;
+import javafx.scene.shape.StrokeLineJoin;
 
 import java.util.Stack;
 
@@ -42,6 +44,8 @@ public class CanvasPane extends myCanvas{
                 }
                 case ("pen")->{
                     gc.setStroke(ToolBoxTop.getColorPicker());
+                    gc.setLineCap(StrokeLineCap.ROUND);
+                    gc.setLineJoin(StrokeLineJoin.ROUND);
                     gc.setLineWidth(ToolBoxTop.getBrushSize());
                     gc.beginPath();
                     gc.moveTo(event.getX(), event.getY());
