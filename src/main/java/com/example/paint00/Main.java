@@ -8,7 +8,7 @@ import javafx.scene.control.TabPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
-
+import java.io.FileNotFoundException;
 
 public class Main extends Application {
     public static Stage myStage;
@@ -17,7 +17,7 @@ public class Main extends Application {
     static TabPlus tab1;
 
     @Override
-    public void start(Stage primaryStage) {
+    public void start(Stage primaryStage) throws FileNotFoundException {
         myStage = primaryStage;
         //set up the title for the stage
         primaryStage.setTitle("Paint 00");

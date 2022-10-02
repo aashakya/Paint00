@@ -14,31 +14,27 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
 public class ToolBoxTop {
-    FileInputStream
-            input;
-    {
-        try {
-            input = new FileInputStream("/Users/apple/IdeaProjects/Paint00/src/main/java/com/example/paint00/Images/img.png");
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
-        }
+    private final String filePath = "src/main/java/com/example/paint00/Images/"; // location for icons
+    private ImageView insertIcon(String loc) throws FileNotFoundException {// function to add icons
+        FileInputStream input = new FileInputStream(loc); // setting the input to the image file location
+        Image image = new Image(input,20,20,false,false); // fitting the image into the icon size
+        return new ImageView(image);
     }
 
-    Image image = new Image(input);
-    ImageView imageView = new ImageView(image);
     // Creating the tools to use
     static ColorPicker colorPicker = new ColorPicker();
-    static Slider brushSize = new Slider(1,100, 10);
+    static Slider brushSize = new Slider(1,100, 10); // creating a slider
 
-    static ToggleButton pen = new ToggleButton("Pen");
-    static ToggleButton eraser = new ToggleButton("Eraser");
-    ToggleButton drawLine = new ToggleButton("Draw Line");
-    ToggleButton drawDashed = new ToggleButton("Draw Dashed Line");
-    ToggleButton drawSquare = new ToggleButton("Draw Square");
-    ToggleButton drawCircle = new ToggleButton("Draw Circle");
-    ToggleButton drawRect = new ToggleButton("Draw Rectangle");
-    ToggleButton drawEllipse = new ToggleButton("Draw ellipse");
-    ToggleButton grabColor = new ToggleButton("Grab color");
+    // Initializing tools with icons
+    ToggleButton pen = new ToggleButton("Pen", insertIcon(filePath+"pen.png"));
+    ToggleButton eraser = new ToggleButton("Eraser",insertIcon(filePath+"eraser.png"));
+    ToggleButton drawLine = new ToggleButton("Line",insertIcon(filePath+"line.png"));
+    ToggleButton drawDashed = new ToggleButton("Dashed Line",insertIcon(filePath+"dashLine.png"));
+    ToggleButton drawSquare = new ToggleButton("Square",insertIcon(filePath+"square.png"));
+    ToggleButton drawCircle = new ToggleButton("Circle",insertIcon(filePath+"circle.png"));
+    ToggleButton drawRect = new ToggleButton("Rect",insertIcon(filePath+"rectangle.png"));
+    ToggleButton drawEllipse = new ToggleButton("Ellipse",insertIcon(filePath+"ellipse.png"));
+    ToggleButton grabColor = new ToggleButton("Color Grab",insertIcon(filePath+"colorGrabber.png"));
     ToggleButton drawPolygon = new ToggleButton("Draw Polygon");
     ToggleButton drawPent = new ToggleButton("Draw Pentagon");
     ToggleButton selectMove = new ToggleButton("Select/Move");
@@ -76,12 +72,14 @@ public class ToolBoxTop {
 
     public static int getSizeNo(){
         try{
-        sideNo = Integer.parseInt(sides.getText().toString());}
-        catch (Exception e){}
+        sideNo = Integer.parseInt(sides.getText());}
+        catch (Exception e) {
+            throw new RuntimeException(e);
+        }
         return sideNo;
     }
-
-    ToolBoxTop(){
+    ToolBoxTop() throws FileNotFoundException {
+        resize.setMinHeight(28); resize.setMinHeight(28); // To match the aesthetic of other buttons
         toggleGroup.getToggles().addAll(pen,eraser,drawLine,drawDashed,drawSquare,drawCircle,drawRect,drawEllipse,
                 grabColor,drawPolygon, drawPent, selectMove, copyMove);
         colorPicker.setValue(Color.BLACK);
@@ -130,7 +128,9 @@ public class ToolBoxTop {
                             parseDouble(canvasHeight.getText()));
                 }
             }
-            catch (Exception ece){}
+            catch (Exception ece) {
+                throw new RuntimeException(ece);
+            }
         });
 
         // On clicking the undo button
