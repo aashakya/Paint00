@@ -4,12 +4,14 @@
 Paint00 is the implementation of the Microsoft Paint application using Java/JavaFX.
 
 ## Roadmap
-### Paint Version 1.1 -  09/30/2022
+### Paint Version 2.0 -  10/01/2022
 New features:
 - Undo/Redo options
 - Clear canvas with alert
 - Draw Polygon of n-sides
 - Fix tab issue with inability to save and open
+- Select/Move tool for a portion of image
+- Copy/Paste tool to copy and paste portion of the image
 
 Known issues:
 
