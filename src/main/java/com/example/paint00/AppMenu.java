@@ -17,7 +17,7 @@ public class AppMenu{
     //create menu bar
     MenuBar menuBar = new MenuBar();
     String nameOfFile = "Untitled"; // to save file
-    String[] ext = new String[1];
+    String ext;
     File saveFile;
     AppMenu(){
         //create menu
@@ -82,6 +82,8 @@ public class AppMenu{
         saveItem.setAccelerator(new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN));
         closeApp.setAccelerator(new KeyCodeCombination(KeyCode.Q, KeyCombination.CONTROL_DOWN));
         saveAsItem.setAccelerator(new KeyCodeCombination(KeyCode.S, KeyCombination.SHIFT_DOWN, KeyCombination.CONTROL_DOWN));
+        undoOpt.setAccelerator(new KeyCodeCombination(KeyCode.Z, KeyCombination.CONTROL_DOWN));
+        redoOpt.setAccelerator(new KeyCodeCombination(KeyCode.Z, KeyCombination.SHIFT_DOWN, KeyCombination.CONTROL_DOWN));
     }
     public void saveAction(){
         try {           //attempt to make a save file from the inserted image
@@ -102,14 +104,20 @@ public class AppMenu{
                 new FileChooser.ExtensionFilter("JPG file","*.jpg"),
                 new FileChooser.ExtensionFilter("BMP file","*.bmp"));
         File savedImg = saveImgAs.showSaveDialog(null);
-        nameOfFile = savedImg.getName();
-        ext[0] = nameOfFile.substring(1 + nameOfFile.lastIndexOf(".")).toLowerCase();
-        try {           //attempt to make a save file from the inserted image
-            WritableImage writableImage = new WritableImage((int) TabPlus.canvasPane.getWidth(), (int) TabPlus.canvasPane.getHeight());
+        ext = nameOfFile.substring(1 + nameOfFile.lastIndexOf(".")).toLowerCase();
+        if (!ext.equals("png")){
+            if (!DialogBox.qualityAlert()) return;
+        }
+        if (savedImg!= null) {
+            nameOfFile = savedImg.getName();
+            WritableImage writableImage = new WritableImage((int) TabPlus.canvasPane.getWidth(),
+                    (int) TabPlus.canvasPane.getHeight());
             TabPlus.canvasPane.snapshot(null,writableImage);
-            ImageIO.write(SwingFXUtils.fromFXImage(writableImage,null), ext[0], savedImg);
-        } catch (IOException o) {   //If the above line breaks, throw an exception
-            throw new RuntimeException(o);
+            try {
+                ImageIO.write(SwingFXUtils.fromFXImage(writableImage,null),"png", savedImg);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         }
         saveFile = savedImg;
     }

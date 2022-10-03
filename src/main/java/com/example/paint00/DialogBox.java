@@ -41,13 +41,30 @@ public class DialogBox {
         unsavedChanges.setTitle("Clear Canvas ???");
         ButtonType selectedBtn = unsavedChanges.showAndWait().get();
         appMenu = new AppMenu();
-        //Save
+        // Clear canvas
         if(selectedBtn == buttons[0]){
             Main.getActiveTab().clearCanvas();
             Main.getActiveTab().canvasPane.updateStack();
         }
+
+    }
+
+    public static boolean qualityAlert(){
+        ButtonType[] buttons = {new ButtonType("Yes"), new ButtonType("No")};
+        Alert unsavedChanges = new Alert(Alert.AlertType.WARNING,
+                "Are you sure you want to continue? Data loss can happen",
+                buttons[0], buttons[1]);
+        unsavedChanges.setTitle("Continue");
+        ButtonType selectedBtn = unsavedChanges.showAndWait().get();
+        appMenu = new AppMenu();
+        //Save
+        if(selectedBtn == buttons[0]){
+            return true;
+        }
         //Save as
         else if(selectedBtn == buttons[1]){
+            return false;
         }
+        return false;
     }
 }
