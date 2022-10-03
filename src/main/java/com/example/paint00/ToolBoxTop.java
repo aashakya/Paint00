@@ -42,42 +42,59 @@ public class ToolBoxTop {
     ToggleButton resize = new ToggleButton("Resize");
     ToggleButton undo = new ToggleButton("Undo");
     ToggleButton redo = new ToggleButton("Redo");
-    ToggleGroup toggleGroup = new ToggleGroup();
-    TextField canvasWidth = new TextField();
-    TextField canvasHeight = new TextField();
-    static TextField sides = new TextField();
-    static int sideNo = 3;
+    ToggleGroup toggleGroup = new ToggleGroup(); // toggle group to un-toggle all buttons except selected
+    TextField canvasWidth = new TextField(); // field for canvas width
+    TextField canvasHeight = new TextField(); // field for canvas width
+    static TextField sides = new TextField(); // field for side input
+    static int sideNo = 3; // initializing sides of polygon to 3 as default sides
+    CanvasPane canvas1; // initializing canvas
+    FlowPane toolBoxTop = new FlowPane(); // flow-pane to move tools to next line if overflow
 
-    CanvasPane canvas1;
-    FlowPane toolBoxTop = new FlowPane();
+    static String selectedTool; // to keep account of selected tools
 
-    static String selectedTool;
-
+    /**
+     * @return the color picker's color value
+     */
     public static Color getColorPicker() {
         return colorPicker.getValue();
-    }
+    } // getter for colorPicker
 
-    public static void setColorPicker(Color color) {
-        ToolBoxTop.colorPicker.setValue(color);
-    }
+    /**
+     * @param color the color value selected from the color picker tool
+     */
+    // setter for colorPicker
+    public static void setColorPicker(Color color) {ToolBoxTop.colorPicker.setValue(color);}
 
+    /**
+     * @return the selected value of the brush size
+     */
     public static double getBrushSize() {
         return brushSize.getValue();
-    }
+    } // getter for brushSize
+
+    /**
+     * @return the name of the tool selected and if no tool is selected returns "None"
+     */
     public static String getSelectedTool() {
-        if(selectedTool != null){
-            return selectedTool;}
+        if(selectedTool != null) return selectedTool; // if tool selected return selected tool
         else return "None";
     }
 
+    /**
+     * @return the number of sides entered by the user
+     */
     public static int getSizeNo(){
         try{
-        sideNo = Integer.parseInt(sides.getText());}
-        catch (Exception e) {
-            throw new RuntimeException(e);
+            sideNo = Integer.parseInt(sides.getText());
+        }
+        catch (Exception ignored) {
         }
         return sideNo;
     }
+
+    /**
+     * @throws FileNotFoundException if
+     */
     ToolBoxTop() throws FileNotFoundException {
         resize.setMinHeight(28); resize.setMinHeight(28); // To match the aesthetic of other buttons
         toggleGroup.getToggles().addAll(pen,eraser,drawLine,drawDashed,drawSquare,drawCircle,drawRect,drawEllipse,
@@ -128,8 +145,7 @@ public class ToolBoxTop {
                             parseDouble(canvasHeight.getText()));
                 }
             }
-            catch (Exception ece) {
-                throw new RuntimeException(ece);
+            catch (Exception ignored) {
             }
         });
 

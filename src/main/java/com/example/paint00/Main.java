@@ -1,3 +1,6 @@
+/**
+ * @author Aakrista Shakya
+ */
 package com.example.paint00;
 
 import javafx.application.Application;

@@ -99,7 +99,7 @@ public class AppMenu{
         saveImgAs.setTitle("Save image as");
         saveImgAs.getExtensionFilters().addAll(
                 new FileChooser.ExtensionFilter("PNG file","*.png"),
-                new FileChooser.ExtensionFilter("PDF file","*.pdf"),
+                new FileChooser.ExtensionFilter("JPG file","*.jpg"),
                 new FileChooser.ExtensionFilter("BMP file","*.bmp"));
         File savedImg = saveImgAs.showSaveDialog(null);
         nameOfFile = savedImg.getName();
