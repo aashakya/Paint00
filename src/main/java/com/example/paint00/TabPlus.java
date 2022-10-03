@@ -17,9 +17,7 @@ public class TabPlus extends Tab {
         scrollpane.setContent(canvasPane);
         this.setContent(scrollpane);
         updateTabTitle();
-        this.setOnCloseRequest(e->{
-            DialogBox.unsavedAlert();
-        });
+        this.setOnCloseRequest(e-> DialogBox.unsavedAlert());
     }
 
     TabPlus(File pathName){
@@ -65,12 +63,5 @@ public class TabPlus extends Tab {
 
     public void redo() {
         TabPlus.canvasPane.redo();
-    }
-
-    public void clearCanvas() {// to clear the canvas
-        canvasPane.updateStack(); // updating stack for undo/redo purpose
-        // clearing canvas
-        TabPlus.canvasPane.gc.clearRect(0,0,canvasPane.getWidth(), canvasPane.getHeight());
-        canvasPane.initDraw(canvasPane.gc, canvasPane.getWidth(),canvasPane.getHeight()); // bg-color to white
     }
 }

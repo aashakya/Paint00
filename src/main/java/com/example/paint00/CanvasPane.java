@@ -204,6 +204,12 @@ public class CanvasPane extends myCanvas{
         this.setHeight(height);
     }
 
+    public void clearCanvas() {// to clear the canvas
+        updateStack(); // updating stack for undo/redo purpose
+        // clearing canvas
+        initDraw(gc, getWidth(), getHeight()); // bg-color to white
+    }
+
     protected void initDraw(GraphicsContext gc, double canvasWidth, double canvasHeight){
         gc.setFill(Color.WHITE);
         gc.fillRect(0, 0, canvasWidth, canvasHeight);

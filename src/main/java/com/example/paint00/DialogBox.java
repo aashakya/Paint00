@@ -43,7 +43,7 @@ public class DialogBox {
         appMenu = new AppMenu();
         // Clear canvas
         if(selectedBtn == buttons[0]){
-            Main.getActiveTab().clearCanvas();
+            Main.getActiveTab().canvasPane.clearCanvas();
             Main.getActiveTab().canvasPane.updateStack();
         }
 
