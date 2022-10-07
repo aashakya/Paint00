@@ -7,23 +7,38 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.image.WritableImage;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Line;
 
 public class myCanvas extends Canvas {
-    GraphicsContext gc;
-    Line line = new Line();
+    GraphicsContext gc; // declaring the graphics context
+
+    /**
+     * Initializes the graphics context as the graphics context of the canvas
+     */
     myCanvas(){
         this.gc = this.getGraphicsContext2D();
     }
 
+    /**
+     * @param x1 x coordinate of Point 1 of the rectangle
+     * @param y1 y coordinate of Point 1 of the rectangle
+     * @param x2 x coordinate of Point 2 of the rectangle
+     * @param y2 y coordinate of Point 2 of the rectangle
+     */
     public void drawRect(double x1, double y1, double x2, double y2) {
-        double x = Math.min(x1, x2);
-        double y = Math.min(y1, y2);
+        double x = Math.min(x1, x2); // get the min x point
+        double y = Math.min(y1, y2); // get the min y point
+        // get the distance between the x and y coordinates of the points
         double w = Math.abs(x1 - x2);
         double h = Math.abs(y1 - y2);
         gc.fillRect(x, y, w, h);
     }
 
+    /**
+     * @param x1 x coordinate of Point 1 of the square
+     * @param y1 y coordinate of Point 1 of the square
+     * @param x2 x coordinate of Point 2 of the square
+     * @param y2 y coordinate of Point 2 of the square
+     */
     public void drawSquare(double x1, double y1, double x2, double y2){
         final double ANGLE_45 = Math.PI/4.0;
         final int SIDES = 4;
@@ -38,11 +53,24 @@ public class myCanvas extends Canvas {
         this.gc.fillPolygon(xPoints, yPoints, SIDES);
     }
 
+    /**
+     * @param x1 x coordinate of the center point of the circle
+     * @param y1 y coordinate of the center point of the circle
+     * @param x2 x coordinate of the end point of the circle
+     * @param y2 y coordinate of the end point of the circle
+     */
     public void drawCircle(double x1, double y1, double x2, double y2) {
         double r = Math.abs(x1 - x2);
         gc.fillOval(x1-r, y1-r, 2*r, 2*r);
     }
 
+    /**
+     * @param x1 x coordinate of the center point of the polygon
+     * @param y1 y coordinate of the center point of the polygon
+     * @param x2 x coordinate of the end point of the polygon
+     * @param y2 y coordinate of the end point of the polygon
+     * @param n Number of sides
+     */
     public void drawPolygon(double x1, double y1, double x2, double y2, int n){
         double[] xPoints = new double[n];
         double[] yPoints = new double[n];
@@ -55,26 +83,45 @@ public class myCanvas extends Canvas {
         this.gc.fillPolygon(xPoints, yPoints, n);
     }
 
+    /**
+     * @param x1 x coordinate of the center point of the ellipse
+     * @param y1 y coordinate of the center point of the ellipse
+     * @param x2 x coordinate of the end point of the ellipse
+     * @param y2 y coordinate of the end point of the ellipse
+     */
     public void drawEllipse(double x1, double y1, double x2, double y2){
         double x = Math.abs(x1-x2);
         double y = Math.abs(y1-y2);
         gc.fillOval(x1-x,y1-y,2*x, 2*y);
     }
 
+    /**
+     * @param x1 x coordinate of Point 1 of the snapshot region
+     * @param y1 y coordinate of Point 1 of the snapshot region
+     * @param x2 x coordinate of Point 2 of the snapshot region
+     * @param y2 y coordinate of Point 2 of the snapshot region
+     * @return
+     */
     public Image getRegion(double x1, double y1, double x2, double y2){
+        // Taking the snapshot of the selected region
         SnapshotParameters sp = new SnapshotParameters();
         WritableImage wi = new WritableImage((int)Math.abs(x1 - x2),(int)Math.abs(y1 - y2));
-
+        // selecting rectangular region of the snapshot
         sp.setViewport(new Rectangle2D(
                 (Math.min(x1, x2)),
                 (Math.min(y1, y2)),
                 Math.abs(x1 - x2),
                 Math.abs(y1 - y2)));
 
-        this.snapshot(sp, wi);
+        this.snapshot(sp, wi); // copying the snapshot to a writable image
         return wi;
     }
 
+    /**
+     * @param x x coordinate of selected point
+     * @param y y coordinate of selected point
+     * @return Color at the selected point
+     */
     public Color getColor(double x, double y){
         return this.getRegion(x, y, x+1, y+1).getPixelReader().getColor(0, 0);
     }

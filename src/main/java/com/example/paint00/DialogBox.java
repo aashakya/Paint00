@@ -3,8 +3,15 @@ package com.example.paint00;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 
+/**
+ * Class for handling the dialog boxes for the application
+ */
 public class DialogBox {
-    static AppMenu appMenu;
+    static AppMenu appMenu; // creating a appMenu object to use the appMenu features
+
+    /**
+     * Alerts user when the user closes the program without saving
+     */
     public static void unsavedAlert(){
         ButtonType[] buttons = {new ButtonType("Save"), new ButtonType("Save As"),
                 new ButtonType("Cancel"), new ButtonType("Close Tab"),
@@ -33,6 +40,9 @@ public class DialogBox {
         }
     }
 
+    /**
+     * Alerts user when they try to clear the canvas
+     */
     public static void clearCAlert(){
         ButtonType[] buttons = {new ButtonType("Yes"), new ButtonType("No")};
         Alert unsavedChanges = new Alert(Alert.AlertType.WARNING,
@@ -49,6 +59,10 @@ public class DialogBox {
 
     }
 
+    /**
+     * Asks user if they are sure they want to clear the content of the canvas
+     * @return boolean based on user selection for Yes or No
+     */
     public static boolean qualityAlert(){
         ButtonType[] buttons = {new ButtonType("Yes"), new ButtonType("No")};
         Alert unsavedChanges = new Alert(Alert.AlertType.WARNING,

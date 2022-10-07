@@ -13,12 +13,18 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 import java.io.FileNotFoundException;
 
+/**
+ * The Paint application
+ */
 public class Main extends Application {
-    public static Stage myStage;
-    static TabPane tabPane;
+    public static Stage myStage; // declaring the stage
+    static TabPane tabPane; // declaring the tabPane
 
-    static TabPlus tab1;
+    static TabPlus tab1; // declaring the tab object as a TabPlus
 
+    /**
+     * @param primaryStage the main stage of the application
+     */
     @Override
     public void start(Stage primaryStage) throws FileNotFoundException {
         myStage = primaryStage;
@@ -39,8 +45,6 @@ public class Main extends Application {
         ToolBoxTop toolBoxTop = new ToolBoxTop();
         // Menu bar
         AppMenu topMenu = new AppMenu();
-
-
         layout.getChildren().add(topMenu.menuBar);
         layout.getChildren().add(toolBoxTop.toolBoxTop);
         layout.getChildren().add(tabPane);
@@ -59,8 +63,12 @@ public class Main extends Application {
         launch();
     }
 
+    /**
+     * @param tabPane The tabPane the application is using
+     * @return a new tab added to the tabPane
+     */
     private Tab newTabButton(TabPane tabPane) {
-        Tab addTab = new Tab("Create Tab");
+        Tab addTab = new Tab("Create Tab"); // Tab button text for adding a new tab
         addTab.setClosable(false);
         tabPane.getSelectionModel().selectedItemProperty().addListener((observable, oldTab, newTab) -> {
             if(newTab == addTab) {
@@ -71,11 +79,16 @@ public class Main extends Application {
         return addTab;
     }
 
-    // Getting the tab user is currently selected
+    /**
+     * @return the tab that user is currently working on
+     */
     public static TabPlus getActiveTab(){
         return (TabPlus) tabPane.getSelectionModel().getSelectedItem();
     }
 
+    /**
+     * Closes the selected tab
+     */
     public static void closeTab() {
         Main.tabPane.getTabs().remove(Main.getActiveTab());
     }

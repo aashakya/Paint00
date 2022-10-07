@@ -13,6 +13,9 @@ import java.awt.image.RenderedImage;
 import java.io.File;
 import java.io.IOException;
 
+/**
+ * The class for the menu of the application
+ */
 public class AppMenu{
     //create menu bar
     MenuBar menuBar = new MenuBar();
@@ -88,6 +91,10 @@ public class AppMenu{
         undoOpt.setAccelerator(new KeyCodeCombination(KeyCode.Z, KeyCombination.CONTROL_DOWN));
         redoOpt.setAccelerator(new KeyCodeCombination(KeyCode.Z, KeyCombination.SHIFT_DOWN, KeyCombination.CONTROL_DOWN));
     }
+
+    /**
+     * Save the files to the file user selected the name as
+     */
     public static void saveAction(){
         try {           //attempt to make a save file from the inserted image
             WritableImage writableImage = new WritableImage((int) TabPlus.canvasPane.getWidth(), (int) TabPlus.canvasPane.getHeight());
@@ -99,6 +106,9 @@ public class AppMenu{
         }
     }
 
+    /**
+     * Ask user for the name, location, and extension of the file to be saved
+     */
     public static void saveAsAction(){
         FileChooser saveImgAs = new FileChooser();
         saveImgAs.setTitle("Save image as");

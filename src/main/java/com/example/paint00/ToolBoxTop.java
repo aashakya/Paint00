@@ -47,7 +47,6 @@ public class ToolBoxTop {
     ComboBox selectTime; // time options as a dropdown list
     ObservableList<String> timeOptions;
     static int sideNo = 3; // initializing sides of polygon to 3 as default sides
-    CanvasPane canvas1; // initializing canvas
     FlowPane toolBoxTop = new FlowPane(); // flow-pane to move tools to next line if overflow
 
     static String selectedTool; // to keep account of selected tools
@@ -93,7 +92,8 @@ public class ToolBoxTop {
     }
 
     /**
-     * @throws FileNotFoundException if
+     * Initialization of the ToolBoxTop. ToolBoxTop contains tools to make changes to the canvas
+     * @throws FileNotFoundException Throws exception if icon images are not found
      */
     ToolBoxTop() throws FileNotFoundException {
         timeOptions = FXCollections.observableArrayList(
@@ -105,28 +105,36 @@ public class ToolBoxTop {
         selectTime = new ComboBox(timeOptions); // adding the time options to drop down list
 
         resize.setMinHeight(28); resize.setMinHeight(28); // To match the aesthetic of other buttons
+        // adding buttons to toggle group to un-toggle when another button is clicked
         toggleGroup.getToggles().addAll(pen,eraser,drawLine,drawDashed,drawSquare,drawCircle,drawRect,drawEllipse,
                 grabColor,drawPolygon, drawPent, selectMove, copyMove);
-        colorPicker.setValue(Color.BLACK);
+        colorPicker.setValue(Color.BLACK); // Initial colorPicker value to Black
 
+        // adding padding and Horizontal gap for aesthetics
         toolBoxTop.setPadding(new Insets(15, 12, 15, 12));
         toolBoxTop.setHgap(10);
 
+        // setting brushSize slider with tick marks
         brushSize.setShowTickLabels(true);
         brushSize.setMajorTickUnit(10f);
         brushSize.setBlockIncrement(10f);
 
-        canvasWidth.setPrefWidth(70);
+        // initializing text label for canvas width and height
+        canvasWidth.setPrefWidth(70); // setting width of the text label
         canvasWidth.setPromptText("Width");
-        canvasHeight.setPrefWidth(70);
+        canvasHeight.setPrefWidth(70); // setting width of the text label
         canvasHeight.setPromptText("Height");
-        sides.setPrefWidth(90);
+
+        // initializing sides text label
+        sides.setPrefWidth(90); // setting width of the text label
         sides.setPromptText("No. of sides");
-        canvas1 = new CanvasPane();
+
+        // adding all the tools to the tool box menu
         toolBoxTop.getChildren().addAll(colorPicker,brushSize,canvasWidth,canvasHeight,resize,pen,eraser,drawLine,
                 drawDashed,drawSquare,drawCircle,drawRect,drawEllipse,grabColor,sides,drawPolygon,drawPent,
                 undo,redo,selectMove,copyMove,selectTime);
 
+        // returning the tool selected in case of change of tool
         toggleGroup.selectedToggleProperty().addListener((observable) -> {
             if (pen.isSelected()){selectedTool = "pen";}
             else if (eraser.isSelected()) {selectedTool = "eraser";}
@@ -148,13 +156,12 @@ public class ToolBoxTop {
         resize.setOnAction(e -> {
             resize.setSelected(false);
             try{
-                if (canvasHeight != null && canvasWidth != null){
+                if (canvasHeight != null && canvasWidth != null){ // making sure both values are entered
                     TabPlus.getCanvasPane().resize(Double.parseDouble(canvasWidth.getText()),Double.
-                            parseDouble(canvasHeight.getText()));
+                            parseDouble(canvasHeight.getText())); // getting the text value from label
                 }
             }
-            catch (Exception ignored) {
-            }
+            catch (Exception ignored) {}
         });
 
         // On clicking the undo button

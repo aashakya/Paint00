@@ -11,79 +11,92 @@ import javafx.scene.shape.StrokeLineJoin;
 
 import java.util.Stack;
 
+/**
+ * CanvasPane is the canvas that we draw upon
+ */
 public class CanvasPane extends myCanvas{
     //default width and height of image
     static double width = 900;
     static double height = 700;
-    private Image imagePiece = null;
-    double x,y;
+    private Image imagePiece = null; // initializing the imagePiece to null, tool for select/move and copy/paste
+    double x,y; // Stores the x and y coordinate of the position where the mouse is clicked
     private final Stack<Image> undoSteps; // Image stack for undo
     private final Stack<Image> redoSteps; // Image stack for redo
     private Point2D initialPoints; // for initial coordinates of portion of selected portion
-    private String selectedTool;
+    private String selectedTool; // to know which tool is currently selected
     private static boolean imageSavedAs = false; // to keep track of if saved as is applied to canvas
     CanvasPane(){
         super();
+        // initializing the stacks for undo and redo
         undoSteps = new Stack<>();
         redoSteps = new Stack<>();
-        resize(width,height);
-        initDraw(gc, width, height);
-        this.undoSteps.push(this.getRegion(0,0,this.getWidth(),this.getHeight()));
+        resize(width,height); // resizing the canvas to the default width and height
+        initDraw(gc, width, height); // calling the initDraw function
+        this.undoSteps.push(this.getRegion(0,0,this.getWidth(),this.getHeight()));// pushing to the undo stack
 
         // canvas actions for mouse movement
-        this.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
+        this.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> { // action for when mouse is pressed
+            // get the initial x and y coordinate
             x = event.getX();
             y = event.getY();
-            gc.setFill(ToolBoxTop.getColorPicker());
-            selectedTool = ToolBoxTop.getSelectedTool();
+            gc.setFill(ToolBoxTop.getColorPicker()); // change the setFill value to the colorPicker's value
+            selectedTool = ToolBoxTop.getSelectedTool(); // get the currently selected tool
             switch (selectedTool) {
-                case ("eraser")->{
-                    gc.setStroke(Color.WHITE);
-                    gc.setLineWidth(ToolBoxTop.getBrushSize());
-                    gc.beginPath();
-                    gc.moveTo(event.getX(), event.getY());
-                    gc.stroke();
-                }
-                case ("pen")->{
-                    gc.setStroke(ToolBoxTop.getColorPicker());
+                case ("eraser")->{ // case for when eraser tool is selected
+                    gc.setStroke(Color.WHITE); // drawing a white line as the "eraser"
+                    // making the eraser stroke smooth
                     gc.setLineCap(StrokeLineCap.ROUND);
                     gc.setLineJoin(StrokeLineJoin.ROUND);
-                    gc.setLineWidth(ToolBoxTop.getBrushSize());
+                    gc.setLineWidth(ToolBoxTop.getBrushSize()); // matching the eraser size to the brushSize
                     gc.beginPath();
-                    gc.moveTo(event.getX(), event.getY());
                     gc.stroke();
                 }
+                case ("pen")->{ // case for when pen tool is selected
+                    gc.setStroke(ToolBoxTop.getColorPicker()); // setting the stroke to colorPicker's value
+                    // making the pen stroke smooth
+                    gc.setLineCap(StrokeLineCap.ROUND);
+                    gc.setLineJoin(StrokeLineJoin.ROUND);
+                    gc.setLineWidth(ToolBoxTop.getBrushSize()); // matching the pen size to the brushSize
+                    gc.beginPath();
+                    gc.stroke();
+                }
+                // calling function according to the shape selected
                 case ("rect")-> this.drawRect(x,y,x,y);
                 case ("square")-> this.drawSquare(x,y,x,y);
                 case ("ellipse")-> this.drawEllipse(x,y,x,y);
                 case ("circle")-> this.drawCircle(x,y,x,y);
-                case ("line")->{
-                    gc.setStroke(ToolBoxTop.getColorPicker());
-                    gc.setLineWidth(ToolBoxTop.getBrushSize());
+                case ("line")->{ // For drawing straight line
+                    gc.setStroke(ToolBoxTop.getColorPicker()); // set Stroke to colorPicker's color
+                    gc.setLineWidth(ToolBoxTop.getBrushSize()); // set line width to brush size
                 }
-                case ("dashedLine")->{
-                    gc.setStroke(ToolBoxTop.getColorPicker());
-                    gc.setLineWidth(ToolBoxTop.getBrushSize());
+                case ("dashedLine")->{ // For drawing dashed line
+                    gc.setStroke(ToolBoxTop.getColorPicker()); // get color picker value
+                    gc.setLineWidth(ToolBoxTop.getBrushSize()); // get line width
+                    // for creating dashed line effects
                     gc.setLineDashes(ToolBoxTop.getBrushSize()*2);
                     gc.setLineDashOffset(ToolBoxTop.getBrushSize()*2);
                 }
-                case ("grabColor")-> ToolBoxTop.setColorPicker(this.getColor(x,y));
+                case ("grabColor")-> ToolBoxTop.setColorPicker(this.getColor(x,y)); // for color grabber
+                // for drawing shapes
                 case ("drawPolygon")-> this.drawPolygon(x,y,x,y, ToolBoxTop.getSizeNo());
                 case ("drawPent")-> this.drawPolygon(x,y,x,y,5);
+                //getting the initialPoints for select/Move and copy/Paste
                 case ("selectMove"),("copyMove")-> initialPoints = new Point2D(x,y); // starting x,y of the canvas select tool
                 default -> {
                 }
             }
-            System.out.println(ToolBoxTop.getSelectedTool());
+            System.out.println(ToolBoxTop.getSelectedTool()); // print the selected tool
         });
 
         this.addEventHandler(MouseEvent.MOUSE_DRAGGED,
                 event -> {
                     switch (selectedTool) {
                         case ("eraser"), ("pen") -> {
+                            // draw pen/eraser as it is dragged
                             gc.lineTo(event.getX(), event.getY());
                             gc.stroke();
                         }
+                        // grab color as it is dragged
                         case ("grabColor")-> ToolBoxTop.setColorPicker(this.getColor(event.getX(),event.getY()));
                         default -> {}
                     }
@@ -91,20 +104,24 @@ public class CanvasPane extends myCanvas{
 
         this.addEventHandler(MouseEvent.MOUSE_RELEASED, event -> {
             switch (selectedTool) {
-                case ("eraser"), ("pen") -> this.updateStack();
+                case ("eraser"), ("pen") -> this.updateStack(); // update the stacks
                 case ("rect")->{
+                    // adding the final points of the rectangle and updating the stacks
                     this.drawRect(x,y,event.getX(),event.getY());
                     this.updateStack();
                 }
                 case ("square")->{
+                    // adding the final points of the square and updating the stacks
                     this.drawSquare(x,y,event.getX(),event.getY());
                     this.updateStack();
                 }
                 case ("ellipse")->{
+                    // drawing an ellipse and updating the stack
                     this.drawEllipse(x,y,event.getX(),event.getY());
                     this.updateStack();
                 }
                 case ("circle")->{
+                    // drawing a circle and updating the stack
                     this.drawCircle(x,y,event.getX(),event.getY());
                     this.updateStack();
                 }
@@ -138,7 +155,7 @@ public class CanvasPane extends myCanvas{
                         if (selectedTool.equals("selectMove"))
                         {
                             gc.setFill(Color.WHITE);
-                            gc.fillRect(Math.min(initialPoints.getX(),event.getX()),
+                            gc.fillRect(Math.min(initialPoints.getX(),event.getX()),// drawing a white rectangle
                                     Math.min(initialPoints.getY(),event.getY()),
                                     Math.abs(event.getX() - initialPoints.getX()),
                                     Math.abs(event.getY() - initialPoints.getY()));
@@ -157,7 +174,7 @@ public class CanvasPane extends myCanvas{
                 }
                 default -> {}
             }
-            Main.getActiveTab().updateTabTitle();
+            //Main.getActiveTab().updateTabTitle();
         });
 
     }
@@ -171,7 +188,7 @@ public class CanvasPane extends myCanvas{
     }
 
     /**
-     * Undo changes to the canvas
+     * Undo the changes to the canvas
      */
     public void undo(){
         Image image = undoSteps.pop();
@@ -191,6 +208,9 @@ public class CanvasPane extends myCanvas{
         }
     }
 
+    /**
+     * Redo the changes made to the canvas
+     */
     public void redo(){
         if(!redoSteps.empty()){
             Image image = redoSteps.pop();
@@ -202,22 +222,38 @@ public class CanvasPane extends myCanvas{
         }
     }
 
+    /**
+     * Resizes the canvas to entered width and height
+     * @param width the resize width of the canvas
+     * @param height the resize height of the canvas
+     */
     public void resize(double width, double height) {
         this.setWidth(width);
         this.setHeight(height);
     }
 
+    /**
+     * Clears the content of the canvas
+     */
     public void clearCanvas() {// to clear the canvas
         updateStack(); // updating stack for undo/redo purpose
         // clearing canvas
         initDraw(gc, getWidth(), getHeight()); // bg-color to white
     }
 
+    /**
+     * @param gc the graphics context
+     * @param canvasWidth the initial width of the canvas
+     * @param canvasHeight the initial height of the canvas
+     */
     protected void initDraw(GraphicsContext gc, double canvasWidth, double canvasHeight){
         gc.setFill(Color.WHITE);
         gc.fillRect(0, 0, canvasWidth, canvasHeight);
     }
 
+    /**
+     * @return boolean value indicating if the user saved the image as or not
+     */
     public boolean getImageSavedAs(){return imageSavedAs;}
     public void setImageSavedAs(){imageSavedAs = true;}
 }

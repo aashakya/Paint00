@@ -4,6 +4,20 @@
 Paint00 is the implementation of the Microsoft Paint application using Java/JavaFX.
 
 ## Roadmap
+### Paint Version 2.1 -  10/01/2022
+New features:
+- Save as 3 different file format
+- Warn when user saves in a low quality image
+- Auto save at 10 seconds
+- 3 Unit Test
+- Javadoc
+
+Known issues:
+
+Expected next sprint:
+- move tool
+- add icon to toggle buttons
+- 
 ### Paint Version 2.0 -  10/01/2022
 New features:
 - Undo/Redo options
