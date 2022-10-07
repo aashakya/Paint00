@@ -1,11 +1,9 @@
 package com.example.paint00;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
-import javafx.scene.control.ColorPicker;
-import javafx.scene.control.Slider;
-import javafx.scene.control.TextField;
-import javafx.scene.control.ToggleButton;
-import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.FlowPane;
@@ -46,6 +44,8 @@ public class ToolBoxTop {
     TextField canvasWidth = new TextField(); // field for canvas width
     TextField canvasHeight = new TextField(); // field for canvas width
     static TextField sides = new TextField(); // field for side input
+    ComboBox selectTime; // time options as a dropdown list
+    ObservableList<String> timeOptions;
     static int sideNo = 3; // initializing sides of polygon to 3 as default sides
     CanvasPane canvas1; // initializing canvas
     FlowPane toolBoxTop = new FlowPane(); // flow-pane to move tools to next line if overflow
@@ -96,6 +96,14 @@ public class ToolBoxTop {
      * @throws FileNotFoundException if
      */
     ToolBoxTop() throws FileNotFoundException {
+        timeOptions = FXCollections.observableArrayList(
+                "10 sec", // adding the list of time options for auto-save
+                "30 sec",
+                "45 sec",
+                "60 sec"
+        );
+        selectTime = new ComboBox(timeOptions); // adding the time options to drop down list
+
         resize.setMinHeight(28); resize.setMinHeight(28); // To match the aesthetic of other buttons
         toggleGroup.getToggles().addAll(pen,eraser,drawLine,drawDashed,drawSquare,drawCircle,drawRect,drawEllipse,
                 grabColor,drawPolygon, drawPent, selectMove, copyMove);
@@ -117,7 +125,7 @@ public class ToolBoxTop {
         canvas1 = new CanvasPane();
         toolBoxTop.getChildren().addAll(colorPicker,brushSize,canvasWidth,canvasHeight,resize,pen,eraser,drawLine,
                 drawDashed,drawSquare,drawCircle,drawRect,drawEllipse,grabColor,sides,drawPolygon,drawPent,
-                undo,redo,selectMove,copyMove);
+                undo,redo,selectMove,copyMove,selectTime);
 
         toggleGroup.selectedToggleProperty().addListener((observable) -> {
             if (pen.isSelected()){selectedTool = "pen";}

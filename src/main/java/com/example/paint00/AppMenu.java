@@ -16,9 +16,10 @@ import java.io.IOException;
 public class AppMenu{
     //create menu bar
     MenuBar menuBar = new MenuBar();
-    String nameOfFile = "Untitled"; // to save file
-    String ext;
-    File saveFile;
+    static String nameOfFile = "Untitled"; // to save file
+    static String ext;
+    static File saveFile;
+    SaveTimer timer;
     AppMenu(){
         //create menu
         Menu fileMenu = new Menu("File");
@@ -50,6 +51,8 @@ public class AppMenu{
 
         //add menu to the menu bar
         menuBar.getMenus().addAll(fileMenu,optionsMenu,helpMenu);
+
+        timer = new SaveTimer(10);
         // for opening the file
         FileChooser fileChooser = new FileChooser();
         openItem.setOnAction(e -> {
@@ -85,7 +88,7 @@ public class AppMenu{
         undoOpt.setAccelerator(new KeyCodeCombination(KeyCode.Z, KeyCombination.CONTROL_DOWN));
         redoOpt.setAccelerator(new KeyCodeCombination(KeyCode.Z, KeyCombination.SHIFT_DOWN, KeyCombination.CONTROL_DOWN));
     }
-    public void saveAction(){
+    public static void saveAction(){
         try {           //attempt to make a save file from the inserted image
             WritableImage writableImage = new WritableImage((int) TabPlus.canvasPane.getWidth(), (int) TabPlus.canvasPane.getHeight());
             TabPlus.canvasPane.snapshot(null,writableImage);
@@ -96,7 +99,7 @@ public class AppMenu{
         }
     }
 
-    public void saveAsAction(){
+    public static void saveAsAction(){
         FileChooser saveImgAs = new FileChooser();
         saveImgAs.setTitle("Save image as");
         saveImgAs.getExtensionFilters().addAll(
@@ -104,12 +107,12 @@ public class AppMenu{
                 new FileChooser.ExtensionFilter("JPG file","*.jpg"),
                 new FileChooser.ExtensionFilter("BMP file","*.bmp"));
         File savedImg = saveImgAs.showSaveDialog(null);
-        ext = nameOfFile.substring(1 + nameOfFile.lastIndexOf(".")).toLowerCase();
-        if (!ext.equals("png")){
-            if (!DialogBox.qualityAlert()) return;
-        }
         if (savedImg!= null) {
             nameOfFile = savedImg.getName();
+            ext = nameOfFile.substring(1 + nameOfFile.lastIndexOf(".")).toLowerCase();
+            if (!ext.equals("png")){
+                if (!DialogBox.qualityAlert()) return;
+            }
             WritableImage writableImage = new WritableImage((int) TabPlus.canvasPane.getWidth(),
                     (int) TabPlus.canvasPane.getHeight());
             TabPlus.canvasPane.snapshot(null,writableImage);
@@ -120,5 +123,6 @@ public class AppMenu{
             }
         }
         saveFile = savedImg;
+        TabPlus.canvasPane.setImageSavedAs(); // setting the image save as indicator to true
     }
 }

@@ -57,11 +57,8 @@ public class TabPlus extends Tab {
         return canvasPane;
     }
 
-    public void undo() {
-        TabPlus.canvasPane.undo();
-    }
+    public void undo() { TabPlus.canvasPane.undo(); }
 
-    public void redo() {
-        TabPlus.canvasPane.redo();
-    }
+    public void redo() { TabPlus.canvasPane.redo(); }
+
 }

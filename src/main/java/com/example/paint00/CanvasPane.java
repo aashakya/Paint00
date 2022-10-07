@@ -21,14 +21,16 @@ public class CanvasPane extends myCanvas{
     private final Stack<Image> redoSteps; // Image stack for redo
     private Point2D initialPoints; // for initial coordinates of portion of selected portion
     private String selectedTool;
+    private static boolean imageSavedAs = false; // to keep track of if saved as is applied to canvas
     CanvasPane(){
         super();
         undoSteps = new Stack<>();
         redoSteps = new Stack<>();
         resize(width,height);
         initDraw(gc, width, height);
-        // canvas actions for mouse movement
         this.undoSteps.push(this.getRegion(0,0,this.getWidth(),this.getHeight()));
+
+        // canvas actions for mouse movement
         this.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
             x = event.getX();
             y = event.getY();
@@ -155,6 +157,7 @@ public class CanvasPane extends myCanvas{
                 }
                 default -> {}
             }
+            Main.getActiveTab().updateTabTitle();
         });
 
     }
@@ -214,4 +217,7 @@ public class CanvasPane extends myCanvas{
         gc.setFill(Color.WHITE);
         gc.fillRect(0, 0, canvasWidth, canvasHeight);
     }
+
+    public boolean getImageSavedAs(){return imageSavedAs;}
+    public void setImageSavedAs(){imageSavedAs = true;}
 }
