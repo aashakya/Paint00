@@ -23,6 +23,23 @@ public class ToolBoxTop {
     static ColorPicker colorPicker = new ColorPicker();
     static Slider brushSize = new Slider(1,100, 10); // creating a slider
 
+    //initializing tool tips
+    Tooltip resizeTips = new Tooltip("Resize"); // resize
+    Tooltip penTips = new Tooltip("Draw Pen"); // pen tool
+    Tooltip eraserTips = new Tooltip("Erase"); // eraser tool
+    Tooltip lineTips = new Tooltip("Draw Line"); // draw line
+    Tooltip dashedLineTips = new Tooltip("Draw Dashed Line"); // draw dashed line
+    Tooltip squareTips = new Tooltip("Draw Square"); // draw square
+    Tooltip circleTips = new Tooltip("Draw Circle"); // draw circle
+    Tooltip rectTips = new Tooltip("Draw Rectangle"); // draw rectangle
+    Tooltip ellipseTips = new Tooltip("Draw Ellipse"); // draw ellipse
+    Tooltip colorGrabTips = new Tooltip("Grab Color"); // grab color
+    Tooltip polygonTips = new Tooltip("Draw Polygon"); // draw n-sided polygon
+    Tooltip pentagonTips = new Tooltip("Draw Pentagon"); // draw pentagon
+    Tooltip undoTips = new Tooltip("Undo Action"); // undo
+    Tooltip redoTips = new Tooltip("Redo Action"); //redo
+    Tooltip selectTimetips = new Tooltip("Select auto save timer"); // auto save timer
+
     // Initializing tools with icons
     ToggleButton pen = new ToggleButton("Pen", insertIcon(filePath+"pen.png"));
     ToggleButton eraser = new ToggleButton("Eraser",insertIcon(filePath+"eraser.png"));
@@ -49,7 +66,7 @@ public class ToolBoxTop {
     static int sideNo = 3; // initializing sides of polygon to 3 as default sides
     FlowPane toolBoxTop = new FlowPane(); // flow-pane to move tools to next line if overflow
 
-    static String selectedTool; // to keep account of selected tools
+    static String selectedTool = null; // to keep account of selected tools
 
     /**
      * @return the color picker's color value
@@ -96,6 +113,22 @@ public class ToolBoxTop {
      * @throws FileNotFoundException Throws exception if icon images are not found
      */
     ToolBoxTop() throws FileNotFoundException {
+        resize.setTooltip(resizeTips);
+        pen.setTooltip(penTips);
+        eraser.setTooltip(eraserTips);
+        drawLine.setTooltip(lineTips);
+        drawDashed.setTooltip(dashedLineTips);
+        drawSquare.setTooltip(squareTips);
+        drawCircle.setTooltip(circleTips);
+        drawRect.setTooltip(rectTips);
+        drawEllipse.setTooltip(ellipseTips);
+        grabColor.setTooltip(colorGrabTips);
+        drawPolygon.setTooltip(polygonTips);
+        drawPent.setTooltip(pentagonTips);
+        undo.setTooltip(undoTips);
+        redo.setTooltip(redoTips);
+        //selectTime.setTooltip(selectTimetips);
+
         timeOptions = FXCollections.observableArrayList(
                 "10 sec", // adding the list of time options for auto-save
                 "30 sec",
@@ -118,6 +151,7 @@ public class ToolBoxTop {
         brushSize.setShowTickLabels(true);
         brushSize.setMajorTickUnit(10f);
         brushSize.setBlockIncrement(10f);
+        brushSize.setValue(25); //initializing the brush Size
 
         // initializing text label for canvas width and height
         canvasWidth.setPrefWidth(70); // setting width of the text label

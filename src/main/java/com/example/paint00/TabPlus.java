@@ -23,40 +23,40 @@ public class TabPlus extends Tab {
         this.setOnCloseRequest(e-> DialogBox.unsavedAlert()); // alert when user closes the tab
     }
 
-//    TabPlus(File pathName){
-//        scrollpane = new ScrollPane();
-//        canvasPane = new CanvasPane();
-//        scrollpane.setContent(canvasPane);
-//        this.setContent(scrollpane);
-//        this.path = pathName;
-//        updateTabTitle();
-//    }
+    TabPlus(File pathName){
+        scrollpane = new ScrollPane();
+        canvasPane = new CanvasPane();
+        scrollpane.setContent(canvasPane);
+        this.setContent(scrollpane);
+        this.path = pathName;
+        updateTabTitle();
+    }
 
-//    public void updateTabTitle(){
-//        if(this.path != null)
-//            this.titleCanvas = this.path.getName();//stores the current name of the title tab
-//        else
-//            this.titleCanvas = "Untitled";
-//        this.setText(this.titleCanvas);
-//    }
+    public void updateTabTitle(){
+        if(this.path != null)
+            this.titleCanvas = this.path.getName();//stores the current name of the title tab
+        else
+            this.titleCanvas = "Untitled";
+        this.setText(this.titleCanvas);
+    }
 
 
-//    private void setTitle(String name) {
-//        this.titleCanvas = name;
-//        updateTabTitle();
-//    }
-//
-//    private File getFilePath() {
-//        return this.path;
-//    }
-//
-//    private void setUnsavedChanges(boolean b) {
-//        this.saveFile = b;
-//    }
-//
-//    private void setFilePath(File path) {
-//        this.path = path;
-//    }
+    private void setTitle(String name) {
+        this.titleCanvas = name;
+        updateTabTitle();
+    }
+
+    private File getFilePath() {
+        return this.path;
+    }
+
+    private void setUnsavedChanges(boolean b) {
+        this.saveFile = b;
+    }
+
+    private void setFilePath(File path) {
+        this.path = path;
+    }
     /**
      * @return the canvasPane used to draw
      */

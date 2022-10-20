@@ -1,7 +1,9 @@
 package com.example.paint00;
 
+import javafx.application.Platform;
+import javafx.embed.swing.JFXPanel;
 import javafx.scene.paint.Color;
-import org.junit.jupiter.api.BeforeEach;
+import javafx.stage.Stage;
 import org.junit.jupiter.api.Test;
 
 import java.io.FileNotFoundException;
@@ -9,17 +11,22 @@ import java.io.FileNotFoundException;
 import static org.junit.jupiter.api.Assertions.*;
 
 class ToolBoxTopTest {
-    @BeforeEach
-    void setUp() {}
 
     @Test
-    void testGetColorPicker() throws FileNotFoundException {
-        System.out.println("testing getColorPicker");
-        Color colorSelect = Color.WHITE;
+    void testGetSizeNo() throws FileNotFoundException {
+        System.out.println("testing getSizeNo");
+        int sizePolygon = 3;
         ToolBoxTop instance = new ToolBoxTop();
-        assertEquals(colorSelect, instance.getColorPicker());// checks if colorPicker returns WHITE
+        assertEquals(sizePolygon, instance.getSizeNo());// checks if colorPicker returns WHITE
     }
 
+    @Test
+    void testGetSelectedTool() throws FileNotFoundException {
+        System.out.println("testing getSelectedTool");
+        ToolBoxTop instance= new ToolBoxTop();
+        String selected = "None";
+        assertEquals(selected, instance.getSelectedTool());// checks if selected tool is
+    }
     @Test
     void testSetColorPicker() throws FileNotFoundException {
         System.out.println("testing setColorPicker");
@@ -31,9 +38,32 @@ class ToolBoxTopTest {
 
     @Test
     void testGetBrushSize() throws FileNotFoundException {
-        int brushSizeValue = 25;
+        double brushSizeValue = 25;
         System.out.println("testing getBrushSize");
         ToolBoxTop instance = new ToolBoxTop();
-        assertEquals(brushSizeValue, instance.getBrushSize());
+        assertEquals(brushSizeValue, instance.getBrushSize()); // checks if brushSize is set to 25
+    }
+
+    @Test
+    public void testPaint() throws InterruptedException{
+        Thread t = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                new JFXPanel();
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            new Main().start(new Stage());
+                        }
+                        catch (Exception e){
+                            System.out.println("The program did not work");
+                        }
+                    }
+                });
+            }
+        });
+        t.start();
+        t.sleep(10000);
     }
 }

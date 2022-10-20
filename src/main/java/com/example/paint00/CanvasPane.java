@@ -176,7 +176,6 @@ public class CanvasPane extends myCanvas{
             }
             //Main.getActiveTab().updateTabTitle();
         });
-
     }
 
     /**
@@ -249,6 +248,10 @@ public class CanvasPane extends myCanvas{
     protected void initDraw(GraphicsContext gc, double canvasWidth, double canvasHeight){
         gc.setFill(Color.WHITE);
         gc.fillRect(0, 0, canvasWidth, canvasHeight);
+    }
+
+    public double getX(){
+        return x;
     }
 
     /**
