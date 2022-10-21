@@ -3,7 +3,7 @@ package com.example.paint00;
 import javafx.application.Platform;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Tab;
-import javafx.scene.image.WritableImage;
+import javafx.scene.layout.Pane;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -20,6 +20,7 @@ public class TabPlus extends Tab {
     ScrollPane scrollpane; // for a scrollable tab
     File path; // stores the tab's file path
     String titleCanvas; // title of the tab
+    Pane cp;
     private Timer loggerTimer;
     private TimerTask logger;
     public final static String LOGGER_TXT = "src/main/java/com/example/paint00/Mylogs.txt";
@@ -28,7 +29,9 @@ public class TabPlus extends Tab {
 
     TabPlus(){
         scrollpane = new ScrollPane(); // initializing the scrollPane
+//        cp = new Pane();
         canvasPane = new CanvasPane(); // initializing the canvasPane
+//
         scrollpane.setContent(canvasPane); // setting the canvasPane to the scrollPane
         this.setContent(scrollpane);
         //updateTabTitle();
@@ -93,26 +96,10 @@ public class TabPlus extends Tab {
     public void rotateCanvas(){TabPlus.canvasPane.setRotate(canvasPane.getRotate()+90);}
 
     public void flipH(){
-        WritableImage writableImage = new WritableImage((int) TabPlus.canvasPane.getWidth(),
-                (int) TabPlus.canvasPane.getHeight());
-        WritableImage image = canvasPane.snapshot(null,writableImage);
-        /*
-        Image img = TabPlus.canvasPane.getRegion(0,0,canvasPane.getWidth(),canvasPane.getHeight());
-        ImageView imgView = new ImageView(writableImage);
-        imgView.setScaleX(-1);
-        Image newImg = imgView.getImage();
-        TabPlus.canvasPane.gc.clearRect(0,0, canvasPane.getWidth(), canvasPane.getHeight());
-        TabPlus.canvasPane.gc.drawImage(newImg, 0,0);
-        canvasPane.gc.save();*/
-        canvasPane.gc.drawImage(image,0,0);
-        canvasPane.setScaleX(-1);
+        canvasPane.setScaleX(-1*canvasPane.getScaleX()); //
     }
     public void flipV(){
-        WritableImage writableImage = new WritableImage((int) TabPlus.canvasPane.getWidth(),
-                (int) TabPlus.canvasPane.getHeight());
-        WritableImage image = canvasPane.snapshot(null,writableImage);
-        canvasPane.gc.drawImage(image,0,0);
-        canvasPane.setScaleY(-1);
+        canvasPane.setScaleY(-1*canvasPane.getScaleY());
     }
 
     /**

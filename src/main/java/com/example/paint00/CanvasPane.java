@@ -20,7 +20,7 @@ import java.util.Stack;
 public class CanvasPane extends myCanvas{
     //default width and height of image
     static double width = 900;
-    static double height = 700;
+    static double height = 900;
     private Image imagePiece = null; // initializing the imagePiece to null, tool for select/move and copy/paste
     double x,y,x1,y1; // Stores the x and y coordinate of the position where the mouse is clicked
     private final Stack<Image> undoSteps; // Image stack for undo
@@ -45,12 +45,11 @@ public class CanvasPane extends myCanvas{
             y = event.getY();
             gc.setFill(ToolBoxTop.getColorPicker()); // change the setFill value to the colorPicker's value
             selectedTool = ToolBoxTop.getSelectedTool(); // get the currently selected tool
+            gc.setLineCap(StrokeLineCap.ROUND);      // making the eraser stroke smooth
+            gc.setLineJoin(StrokeLineJoin.ROUND);
             switch (selectedTool) {
                 case ("eraser")->{ // case for when eraser tool is selected
                     gc.setStroke(Color.WHITE); // drawing a white line as the "eraser"
-                    // making the eraser stroke smooth
-                    gc.setLineCap(StrokeLineCap.ROUND);
-                    gc.setLineJoin(StrokeLineJoin.ROUND);
                     gc.setLineWidth(ToolBoxTop.getBrushSize()); // matching the eraser size to the brushSize
                     gc.beginPath();
                     gc.stroke();
@@ -58,8 +57,6 @@ public class CanvasPane extends myCanvas{
                 case ("pen")->{ // case for when pen tool is selected
                     gc.setStroke(ToolBoxTop.getColorPicker()); // setting the stroke to colorPicker's value
                     // making the pen stroke smooth
-                    gc.setLineCap(StrokeLineCap.ROUND);
-                    gc.setLineJoin(StrokeLineJoin.ROUND);
                     gc.setLineWidth(ToolBoxTop.getBrushSize()); // matching the pen size to the brushSize
                     gc.beginPath();
                     gc.stroke();
@@ -165,7 +162,7 @@ public class CanvasPane extends myCanvas{
                         // setting the cut part of the image to white
                         if (selectedTool.equals("selectMove"))
                         {
-                            gc.setFill(Color.TRANSPARENT);
+                            gc.setFill(Color.WHITE);
                             gc.fillRect(Math.min(initialPoints.getX(),event.getX()),// drawing a white rectangle
                                     Math.min(initialPoints.getY(),event.getY()),
                                     Math.abs(event.getX() - initialPoints.getX()),
