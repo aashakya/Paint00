@@ -55,7 +55,7 @@ public class AppMenu{
         //add menu to the menu bar
         menuBar.getMenus().addAll(fileMenu,optionsMenu,helpMenu);
 
-        timer = new SaveTimer(10);
+        //timer = new SaveTimer(10);
         // for opening the file
         FileChooser fileChooser = new FileChooser();
         openItem.setOnAction(e -> {

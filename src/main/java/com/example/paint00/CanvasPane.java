@@ -1,18 +1,17 @@
 package com.example.paint00;
 
-import javafx.event.EventHandler;
+import javafx.geometry.Point2D;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.*;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
-
-import javafx.geometry.Point2D;
 import javafx.scene.shape.StrokeLineCap;
 import javafx.scene.shape.StrokeLineJoin;
 
-import java.awt.image.BufferedImage;
 import java.util.Stack;
 
 /**
@@ -89,10 +88,10 @@ public class CanvasPane extends myCanvas{
                 case ("selectMove"),("copyMove") -> initialPoints = new Point2D(x,y);
                 // starting x,y of the canvas select tool
                 case("selectRotate") -> {
+                    imagePiece = null;
                     initialPoints = new Point2D(x,y);
                     x1 = x;
                     y1 = y;
-                    imagePiece = null;
                 }
                 default -> {
                 }
@@ -221,7 +220,7 @@ public class CanvasPane extends myCanvas{
             iv = new ImageView(imagePiece);
             iv.setRotate(i);
             SnapshotParameters param = new SnapshotParameters();
-            param.setFill(Color.WHITE);
+            param.setFill(Color.TRANSPARENT);
             Image rotatedImg = iv.snapshot(param,null);
             this.gc.drawImage(rotatedImg,x1,y1);
         }

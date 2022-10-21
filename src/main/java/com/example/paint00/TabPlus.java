@@ -1,9 +1,17 @@
 package com.example.paint00;
 
+import javafx.application.Platform;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Tab;
+import javafx.scene.image.WritableImage;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * Tab class for the Tab feature of the application
@@ -12,8 +20,12 @@ public class TabPlus extends Tab {
     ScrollPane scrollpane; // for a scrollable tab
     File path; // stores the tab's file path
     String titleCanvas; // title of the tab
+    private Timer loggerTimer;
+    private TimerTask logger;
+    public final static String LOGGER_TXT = "src/main/java/com/example/paint00/Mylogs.txt";
     public static CanvasPane canvasPane; // creating a canvasPane
     public boolean saveFile; // indicating if saved file
+
     TabPlus(){
         scrollpane = new ScrollPane(); // initializing the scrollPane
         canvasPane = new CanvasPane(); // initializing the canvasPane
@@ -21,6 +33,7 @@ public class TabPlus extends Tab {
         this.setContent(scrollpane);
         //updateTabTitle();
         this.setOnCloseRequest(e-> DialogBox.unsavedAlert()); // alert when user closes the tab
+        initLogger();
     }
 
     TabPlus(File pathName){
@@ -74,4 +87,66 @@ public class TabPlus extends Tab {
      */
     public void redo() { TabPlus.canvasPane.redo(); }
 
+    /**
+     * Rotate the canvas 90 degree clockwise
+     */
+    public void rotateCanvas(){TabPlus.canvasPane.setRotate(canvasPane.getRotate()+90);}
+
+    public void flipH(){
+        WritableImage writableImage = new WritableImage((int) TabPlus.canvasPane.getWidth(),
+                (int) TabPlus.canvasPane.getHeight());
+        WritableImage image = canvasPane.snapshot(null,writableImage);
+        /*
+        Image img = TabPlus.canvasPane.getRegion(0,0,canvasPane.getWidth(),canvasPane.getHeight());
+        ImageView imgView = new ImageView(writableImage);
+        imgView.setScaleX(-1);
+        Image newImg = imgView.getImage();
+        TabPlus.canvasPane.gc.clearRect(0,0, canvasPane.getWidth(), canvasPane.getHeight());
+        TabPlus.canvasPane.gc.drawImage(newImg, 0,0);
+        canvasPane.gc.save();*/
+        canvasPane.gc.drawImage(image,0,0);
+        canvasPane.setScaleX(-1);
+    }
+    public void flipV(){
+        WritableImage writableImage = new WritableImage((int) TabPlus.canvasPane.getWidth(),
+                (int) TabPlus.canvasPane.getHeight());
+        WritableImage image = canvasPane.snapshot(null,writableImage);
+        canvasPane.gc.drawImage(image,0,0);
+        canvasPane.setScaleY(-1);
+    }
+
+    /**
+     * initialization of the Logger with timer
+     */
+    private void initLogger(){
+        this.loggerTimer = new Timer(); // creating a timer for the logger
+        this.logger = new TimerTask() { // creating a timer task
+            @Override
+            public void run() {
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        File loggerFile = new File(LOGGER_TXT);
+                        try {
+                            loggerFile.createNewFile(); // creating a new txt file
+                        } catch (Exception ex) {
+                            System.out.println(ex); // print exception
+                        }
+                        try {
+                            FileWriter writer = new FileWriter(LOGGER_TXT, true); // writing the to txt file
+                            BufferedWriter writer_buffer = new BufferedWriter(writer);
+                            writer_buffer.write(LocalDate.now() + " "+ LocalTime.now()+ " "
+                                    + ToolBoxTop.getSelectedTool() + " tool is selected");
+                            // format = date time -- tool is selected
+                            writer_buffer.newLine();
+                            writer_buffer.close();
+                        } catch (Exception ex) {
+                            System.out.println(ex);
+                        }
+                    }
+                });
+            }
+        };
+        this.loggerTimer.scheduleAtFixedRate(this.logger, 4000, 20000);
+    }
 }
