@@ -1,14 +1,18 @@
 package com.example.paint00;
 
+import javafx.event.EventHandler;
+import javafx.scene.SnapshotParameters;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
-import javafx.scene.input.MouseEvent;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.*;
 import javafx.scene.paint.Color;
 
 import javafx.geometry.Point2D;
 import javafx.scene.shape.StrokeLineCap;
 import javafx.scene.shape.StrokeLineJoin;
 
+import java.awt.image.BufferedImage;
 import java.util.Stack;
 
 /**
@@ -19,11 +23,12 @@ public class CanvasPane extends myCanvas{
     static double width = 900;
     static double height = 700;
     private Image imagePiece = null; // initializing the imagePiece to null, tool for select/move and copy/paste
-    double x,y; // Stores the x and y coordinate of the position where the mouse is clicked
+    double x,y,x1,y1; // Stores the x and y coordinate of the position where the mouse is clicked
     private final Stack<Image> undoSteps; // Image stack for undo
     private final Stack<Image> redoSteps; // Image stack for redo
     private Point2D initialPoints; // for initial coordinates of portion of selected portion
     private String selectedTool; // to know which tool is currently selected
+    private ImageView iv; // image view for screen rotate
     private static boolean imageSavedAs = false; // to keep track of if saved as is applied to canvas
     CanvasPane(){
         super();
@@ -81,7 +86,14 @@ public class CanvasPane extends myCanvas{
                 case ("drawPolygon")-> this.drawPolygon(x,y,x,y, ToolBoxTop.getSizeNo());
                 case ("drawPent")-> this.drawPolygon(x,y,x,y,5);
                 //getting the initialPoints for select/Move and copy/Paste
-                case ("selectMove"),("copyMove")-> initialPoints = new Point2D(x,y); // starting x,y of the canvas select tool
+                case ("selectMove"),("copyMove") -> initialPoints = new Point2D(x,y);
+                // starting x,y of the canvas select tool
+                case("selectRotate") -> {
+                    initialPoints = new Point2D(x,y);
+                    x1 = x;
+                    y1 = y;
+                    imagePiece = null;
+                }
                 default -> {
                 }
             }
@@ -146,7 +158,7 @@ public class CanvasPane extends myCanvas{
                     this.drawPolygon(x,y,event.getX(),event.getY(),5);
                     this.updateStack();
                 }
-                case ("selectMove"),("copyMove")->{ // for selecting portion of canvas
+                case ("selectMove"),("copyMove"),("selectRotate")->{ // for selecting portion of canvas
                     if (imagePiece == null) { // if portion is not selected yet
                         this.updateStack(); // adding canvas snapshot to stack before cutting the portion
                         // getting certain portion of the screen
@@ -154,7 +166,7 @@ public class CanvasPane extends myCanvas{
                         // setting the cut part of the image to white
                         if (selectedTool.equals("selectMove"))
                         {
-                            gc.setFill(Color.WHITE);
+                            gc.setFill(Color.TRANSPARENT);
                             gc.fillRect(Math.min(initialPoints.getX(),event.getX()),// drawing a white rectangle
                                     Math.min(initialPoints.getY(),event.getY()),
                                     Math.abs(event.getX() - initialPoints.getX()),
@@ -162,20 +174,57 @@ public class CanvasPane extends myCanvas{
                         }
                         return;
                     }
+                    if (selectedTool.equals("selectRotate")){
+                        return;}
                     // if snapshot is already taken of certain portion of canvas
                     this.gc.drawImage(
                             imagePiece,
                             event.getX(),
                             event.getY()
                     );
-                    //this.updateStack(); // pushing the new canvas image to stack
+                    // pushing the new canvas image to stack
                     //set the image back to null
                     imagePiece = null;
                 }
                 default -> {}
             }
-            //Main.getActiveTab().updateTabTitle();
+            Main.getActiveTab().updateTabTitle();
+            //
+            this.getScene().addEventFilter(KeyEvent.KEY_PRESSED, ke -> {
+                if (ke.getCode() == KeyCode.J) {
+                    System.out.println("Key Pressed: " + ke.getCode());
+                    rotatePiece(90);
+                    ke.consume(); // stops passing the event to next node
+                }
+                if (ke.getCode() == KeyCode.K) {
+                    System.out.println("Key Pressed: " + ke.getCode());
+                    rotatePiece(180);
+                    ke.consume(); // stops passing the event to next node
+                }
+                if (ke.getCode() == KeyCode.L) {
+                    System.out.println("Key Pressed: " + ke.getCode());
+                    rotatePiece(270);
+                    ke.consume(); // stops passing the event to next node
+                }
+                if (ke.getCode() == KeyCode.R) {
+                    System.out.println("Key Pressed: " + ke.getCode());
+                    rotatePiece(360);
+                    ke.consume(); // stops passing the event to next node
+                }
+            });
+            //
         });
+    }
+
+    public void rotatePiece(int i){
+        if (imagePiece != null){
+            iv = new ImageView(imagePiece);
+            iv.setRotate(i);
+            SnapshotParameters param = new SnapshotParameters();
+            param.setFill(Color.WHITE);
+            Image rotatedImg = iv.snapshot(param,null);
+            this.gc.drawImage(rotatedImg,x1,y1);
+        }
     }
 
     /**
@@ -248,10 +297,6 @@ public class CanvasPane extends myCanvas{
     protected void initDraw(GraphicsContext gc, double canvasWidth, double canvasHeight){
         gc.setFill(Color.WHITE);
         gc.fillRect(0, 0, canvasWidth, canvasHeight);
-    }
-
-    public double getX(){
-        return x;
     }
 
     /**

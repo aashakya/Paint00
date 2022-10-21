@@ -38,7 +38,7 @@ public class ToolBoxTop {
     Tooltip pentagonTips = new Tooltip("Draw Pentagon"); // draw pentagon
     Tooltip undoTips = new Tooltip("Undo Action"); // undo
     Tooltip redoTips = new Tooltip("Redo Action"); //redo
-    Tooltip selectTimetips = new Tooltip("Select auto save timer"); // auto save timer
+    //Tooltip selectTimetips = new Tooltip("Select auto save timer"); // auto save timer
 
     // Initializing tools with icons
     ToggleButton pen = new ToggleButton("Pen", insertIcon(filePath+"pen.png"));
@@ -57,6 +57,10 @@ public class ToolBoxTop {
     ToggleButton resize = new ToggleButton("Resize");
     ToggleButton undo = new ToggleButton("Undo");
     ToggleButton redo = new ToggleButton("Redo");
+    ToggleButton selectRotate = new ToggleButton("Select/Rotate");
+    Button rotate = new Button("Rotate");
+    Button flipHorizon = new Button("Flip Horizontally");
+    Button flipVert = new Button("Flip Vertically");
     ToggleGroup toggleGroup = new ToggleGroup(); // toggle group to un-toggle all buttons except selected
     TextField canvasWidth = new TextField(); // field for canvas width
     TextField canvasHeight = new TextField(); // field for canvas width
@@ -140,7 +144,7 @@ public class ToolBoxTop {
         resize.setMinHeight(28); resize.setMinHeight(28); // To match the aesthetic of other buttons
         // adding buttons to toggle group to un-toggle when another button is clicked
         toggleGroup.getToggles().addAll(pen,eraser,drawLine,drawDashed,drawSquare,drawCircle,drawRect,drawEllipse,
-                grabColor,drawPolygon, drawPent, selectMove, copyMove);
+                grabColor,drawPolygon,drawPent,selectMove,copyMove,selectRotate);
         colorPicker.setValue(Color.BLACK); // Initial colorPicker value to Black
 
         // adding padding and Horizontal gap for aesthetics
@@ -166,7 +170,7 @@ public class ToolBoxTop {
         // adding all the tools to the tool box menu
         toolBoxTop.getChildren().addAll(colorPicker,brushSize,canvasWidth,canvasHeight,resize,pen,eraser,drawLine,
                 drawDashed,drawSquare,drawCircle,drawRect,drawEllipse,grabColor,sides,drawPolygon,drawPent,
-                undo,redo,selectMove,copyMove,selectTime);
+                undo,redo,selectMove,copyMove,selectTime,rotate,flipHorizon,flipVert,selectRotate);
 
         // returning the tool selected in case of change of tool
         toggleGroup.selectedToggleProperty().addListener((observable) -> {
@@ -183,6 +187,7 @@ public class ToolBoxTop {
             else if (drawPent.isSelected()){selectedTool="drawPent";}
             else if (selectMove.isSelected()) {selectedTool="selectMove";}
             else if (copyMove.isSelected()) {selectedTool="copyMove";}
+            else if (selectRotate.isSelected()) {selectedTool="selectRotate";}
             else selectedTool="none";
         });
 
@@ -206,6 +211,18 @@ public class ToolBoxTop {
         redo.setOnAction(e -> {
             Main.getActiveTab().redo(); // call the redo function
             redo.setSelected(false); // deselect redo
+        });
+        // On clicking rotate button
+        rotate.setOnAction(e -> {
+            Main.getActiveTab().rotateCanvas();
+        });
+        // On clicking flip horizontally
+        flipHorizon.setOnAction(e ->{
+            Main.getActiveTab().flipH();
+        });
+        // On clicking flip vertically
+        flipVert.setOnAction(e ->{
+            Main.getActiveTab().flipV();
         });
     }
 }
