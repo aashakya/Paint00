@@ -19,27 +19,17 @@ public class SaveTimer{
             @Override
             public void run() {
                 Platform.runLater(() -> {
-//                    if (timePeriod > 0){
-//                        System.out.println(timePeriod);
-//                        timePeriod--;
-//                    }
-//                    else {
                         saveActionSteps();
-//                        timer.cancel();
-//                        timePeriod = timePeriodInput;
-//                        //timer.scheduleAtFixedRate(saveTask, 0, 1000); // Delay with certain time period
-//                    }
                 });
             }
         };
-        timer.scheduleAtFixedRate(saveTask, 10000, 1000*timePeriod); // Delay with certain time period
+        timer.scheduleAtFixedRate(saveTask, 1000*timePeriod, 1000*timePeriod); // Delay with certain time period
 
     }
 
     /**
      * Either calls the Save function or SaveAction function depending on
      * if the SaveAs is already applied or not
-     *
      * SaveAs is called if the image is not Saved As already
      */
     private void saveActionSteps(){

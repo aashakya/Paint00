@@ -8,9 +8,13 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.paint.Color;
+
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
+/**
+ * The tool box class of the Paint Application
+ */
 public class ToolBoxTop {
     private final String filePath = "src/main/java/com/example/paint00/Images/"; // location for icons
     private ImageView insertIcon(String loc) throws FileNotFoundException {// function to add icons
@@ -25,7 +29,7 @@ public class ToolBoxTop {
 
     //initializing tool tips
     Tooltip resizeTips = new Tooltip("Resize"); // resize
-    Tooltip penTips = new Tooltip("Draw Pen"); // pen tool
+    Tooltip penTips = new Tooltip("Pen"); // pen tool
     Tooltip eraserTips = new Tooltip("Erase"); // eraser tool
     Tooltip lineTips = new Tooltip("Draw Line"); // draw line
     Tooltip dashedLineTips = new Tooltip("Draw Dashed Line"); // draw dashed line
@@ -38,7 +42,6 @@ public class ToolBoxTop {
     Tooltip pentagonTips = new Tooltip("Draw Pentagon"); // draw pentagon
     Tooltip undoTips = new Tooltip("Undo Action"); // undo
     Tooltip redoTips = new Tooltip("Redo Action"); //redo
-    //Tooltip selectTimetips = new Tooltip("Select auto save timer"); // auto save timer
 
     // Initializing tools with icons
     ToggleButton pen = new ToggleButton("Pen", insertIcon(filePath+"pen.png"));
@@ -58,14 +61,17 @@ public class ToolBoxTop {
     ToggleButton undo = new ToggleButton("Undo", insertIcon(filePath+"undo.png"));
     ToggleButton redo = new ToggleButton("Redo", insertIcon(filePath+"redo.png"));
     ToggleButton selectRotate = new ToggleButton("Select/Rotate");
+    ToggleButton zoomIn = new ToggleButton("Zoom In", insertIcon(filePath+"zoomIn.png"));
+    ToggleButton zoomOut = new ToggleButton("Zoom Out", insertIcon(filePath+"zoomOut.png"));
     Button rotate = new Button("Rotate", insertIcon(filePath+"rotate.png"));
-    Button flipHorizon = new Button("Flip Horizontally");
-    Button flipVert = new Button("Flip Vertically");
+    Button flipHorizon = new Button("Flip H");
+    Button flipVert = new Button("Flip V");
     ToggleGroup toggleGroup = new ToggleGroup(); // toggle group to un-toggle all buttons except selected
     TextField canvasWidth = new TextField(); // field for canvas width
     TextField canvasHeight = new TextField(); // field for canvas width
     static TextField sides = new TextField(); // field for side input
     ComboBox selectTime; // time options as a dropdown list
+    // add title to the ComboBox
     ObservableList<String> timeOptions;
     static int sideNo = 3; // initializing sides of polygon to 3 as default sides
     FlowPane toolBoxTop = new FlowPane(); // flow-pane to move tools to next line if overflow
@@ -131,20 +137,24 @@ public class ToolBoxTop {
         drawPent.setTooltip(pentagonTips);
         undo.setTooltip(undoTips);
         redo.setTooltip(redoTips);
-        //selectTime.setTooltip(selectTimetips);
 
         timeOptions = FXCollections.observableArrayList(
-                "10 sec", // adding the list of time options for auto-save
-                "30 sec",
-                "45 sec",
-                "60 sec"
+                "60 sec", // adding the list of time options for auto-save
+                "120 sec"
         );
-        selectTime = new ComboBox(timeOptions); // adding the time options to drop down list
+
+        selectTime = new ComboBox(timeOptions); // adding the time options to drop-down list
+        selectTime.setPromptText("Time :"); // setting the prompt text for the drop-down list
+        // On clicking 60 sec or 120 sec, call SaveTimer and pass the number of seconds
+        selectTime.setOnAction(event -> {
+            if(selectTime.getValue().equals("60 sec")) new SaveTimer(60);
+            else if(selectTime.getValue().equals("120 sec")) new SaveTimer(120);
+        });
 
         resize.setMinHeight(28); resize.setMinHeight(28); // To match the aesthetic of other buttons
         // adding buttons to toggle group to un-toggle when another button is clicked
         toggleGroup.getToggles().addAll(pen,eraser,drawLine,drawDashed,drawSquare,drawCircle,drawRect,drawEllipse,
-                grabColor,drawPolygon,drawPent,selectMove,copyMove,selectRotate);
+                grabColor,drawPolygon,drawPent,selectMove,copyMove,selectRotate,zoomIn,zoomOut);
         colorPicker.setValue(Color.BLACK); // Initial colorPicker value to Black
 
         // adding padding and Horizontal gap for aesthetics
@@ -170,7 +180,7 @@ public class ToolBoxTop {
         // adding all the tools to the tool box menu
         toolBoxTop.getChildren().addAll(colorPicker,brushSize,canvasWidth,canvasHeight,resize,pen,eraser,drawLine,
                 drawDashed,drawSquare,drawCircle,drawRect,drawEllipse,grabColor,sides,drawPolygon,drawPent,
-                undo,redo,selectMove,copyMove,selectTime,rotate,flipHorizon,flipVert,selectRotate);
+                undo,redo,selectMove,copyMove,selectTime,rotate,flipHorizon,flipVert,selectRotate,zoomIn,zoomOut);
 
         // returning the tool selected in case of change of tool
         toggleGroup.selectedToggleProperty().addListener((observable) -> {
@@ -208,6 +218,7 @@ public class ToolBoxTop {
             Main.getActiveTab().undo(); // call the undo function
             undo.setSelected(false); // deselect undo
         });
+        // On clicking the redo button
         redo.setOnAction(e -> {
             Main.getActiveTab().redo(); // call the redo function
             redo.setSelected(false); // deselect redo
@@ -223,6 +234,16 @@ public class ToolBoxTop {
         // On clicking flip vertically
         flipVert.setOnAction(e ->{
             Main.getActiveTab().flipV();
+        });
+        // On clicking zoom in, zoom in the canvas
+        zoomIn.setOnAction(e -> {
+            Main.getActiveTab().zoomIn();
+            selectedTool = "Zoom In";
+        });
+        // On clicking zoom out, zoom out the canvas
+        zoomOut.setOnAction(e -> {
+            Main.getActiveTab().zoomOut();
+            selectedTool = "Zoom Out";
         });
     }
 }

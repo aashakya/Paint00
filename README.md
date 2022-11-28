@@ -4,6 +4,19 @@
 Paint00 is the implementation of the Microsoft Paint application using Java/JavaFX.
 
 ## Roadmap
+
+### Paint Version 3.0 -  10/21/2022
+New features:
+- Rotate image (90/180/270)
+- Rotate a selection of canvas (90/180/270)
+- Tooltips to all buttons
+- Horizontal and Vertical flip
+- Threaded logging to log the tools used, logs at a constant 20 sec interval
+
+Known issues:
+
+Expected next sprint:
+
 ### Paint Version 2.1 -  10/01/2022
 New features:
 - Save as 3 different file format

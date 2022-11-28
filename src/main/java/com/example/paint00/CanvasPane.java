@@ -19,8 +19,8 @@ import java.util.Stack;
  */
 public class CanvasPane extends myCanvas{
     //default width and height of image
-    static double width = 900;
-    static double height = 900;
+    double width = 900;
+    double height = 900;
     private Image imagePiece = null; // initializing the imagePiece to null, tool for select/move and copy/paste
     double x,y,x1,y1; // Stores the x and y coordinate of the position where the mouse is clicked
     private final Stack<Image> undoSteps; // Image stack for undo
@@ -28,7 +28,7 @@ public class CanvasPane extends myCanvas{
     private Point2D initialPoints; // for initial coordinates of portion of selected portion
     private String selectedTool; // to know which tool is currently selected
     private ImageView iv; // image view for screen rotate
-    private static boolean imageSavedAs = false; // to keep track of if saved as is applied to canvas
+    private boolean imageSavedAs = false; // to keep track of if saved as is applied to canvas
     CanvasPane(){
         super();
         // initializing the stacks for undo and redo
@@ -184,8 +184,7 @@ public class CanvasPane extends myCanvas{
                 }
                 default -> {}
             }
-            Main.getActiveTab().updateTabTitle();
-            //
+            // Use keys J,K and L to rotate. J rotates 90 degrees, K rotates 180 degrees and L rotates 270 degrees
             this.getScene().addEventFilter(KeyEvent.KEY_PRESSED, ke -> {
                 if (ke.getCode() == KeyCode.J) {
                     System.out.println("Key Pressed: " + ke.getCode());
@@ -212,6 +211,9 @@ public class CanvasPane extends myCanvas{
         });
     }
 
+    /**
+     * @param i the angle to rotate the imagePiece
+     */
     public void rotatePiece(int i){
         if (imagePiece != null){
             iv = new ImageView(imagePiece);
@@ -299,5 +301,9 @@ public class CanvasPane extends myCanvas{
      * @return boolean value indicating if the user saved the image as or not
      */
     public boolean getImageSavedAs(){return imageSavedAs;}
+
+    /**
+     * change imageSavedAs value to true
+     */
     public void setImageSavedAs(){imageSavedAs = true;}
 }

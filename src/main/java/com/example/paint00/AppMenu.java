@@ -19,10 +19,10 @@ import java.io.IOException;
 public class AppMenu{
     //create menu bar
     MenuBar menuBar = new MenuBar();
-    static String nameOfFile = "Untitled"; // to save file
-    static String ext;
+    static String nameOfFile = "Untitled"; // name of the file
+    static String ext; // extension of the file
     static File saveFile;
-    SaveTimer timer;
+    SaveTimer timer; // timer for the auto save feature
     AppMenu(){
         //create menu
         Menu fileMenu = new Menu("File");
@@ -55,7 +55,7 @@ public class AppMenu{
         //add menu to the menu bar
         menuBar.getMenus().addAll(fileMenu,optionsMenu,helpMenu);
 
-        //timer = new SaveTimer(10);
+        timer = new SaveTimer(60);
         // for opening the file
         FileChooser fileChooser = new FileChooser();
         openItem.setOnAction(e -> {
@@ -70,12 +70,13 @@ public class AppMenu{
             if (insImg != null) {
                 Image img = new Image(insImg.toURI().toString());
                 saveFile = insImg;
-                TabPlus.canvasPane.setWidth(img.getWidth());
-                TabPlus.canvasPane.setHeight(img.getHeight());
-                TabPlus.canvasPane.gc.drawImage(img, 0,0);
-                TabPlus.canvasPane.updateStack();
+                Main.getActiveTab().canvasPane.setWidth(img.getWidth());
+                Main.getActiveTab().canvasPane.setHeight(img.getHeight());
+                Main.getActiveTab().canvasPane.gc.drawImage(img, 0,0);
+                Main.getActiveTab().canvasPane.updateStack();
             }
         });
+        // call functions according to the menu item selected
         saveAsItem.setOnAction(e -> saveAsAction());
         saveItem.setOnAction(e -> saveAction());
         closeApp.setOnAction(e -> DialogBox.unsavedAlert());
@@ -84,6 +85,7 @@ public class AppMenu{
         redoOpt.setOnAction(e -> Main.getActiveTab().redo());
         clearCanvas.setOnAction(e -> DialogBox.clearCAlert());
 
+        // keyboard shortcuts for the menu options
         openItem.setAccelerator(new KeyCodeCombination(KeyCode.O, KeyCombination.CONTROL_DOWN));
         saveItem.setAccelerator(new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN));
         closeApp.setAccelerator(new KeyCodeCombination(KeyCode.Q, KeyCombination.CONTROL_DOWN));
@@ -101,7 +103,7 @@ public class AppMenu{
             TabPlus.canvasPane.snapshot(null,writableImage);
             RenderedImage ri = SwingFXUtils.fromFXImage(writableImage,null);
             ImageIO.write(ri, "png", saveFile);
-
+            //this.setTitle(this.getFilePath().getName());
         } catch (IOException o) {   //If the above line breaks, throw an exception
         }
     }
@@ -119,6 +121,7 @@ public class AppMenu{
         File savedImg = saveImgAs.showSaveDialog(null);
         if (savedImg!= null) {
             nameOfFile = savedImg.getName();
+            Main.getActiveTab().setText(nameOfFile); // set current TabPlus name to nameOfFile string
             ext = nameOfFile.substring(1 + nameOfFile.lastIndexOf(".")).toLowerCase();
             if (!ext.equals("png")){
                 if (!DialogBox.qualityAlert()) return;
@@ -128,11 +131,11 @@ public class AppMenu{
             TabPlus.canvasPane.snapshot(null,writableImage);
             try {
                 ImageIO.write(SwingFXUtils.fromFXImage(writableImage,null),"png", savedImg);
+                TabPlus.canvasPane.setImageSavedAs(); // setting the image save as indicator to true
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
         }
         saveFile = savedImg;
-        TabPlus.canvasPane.setImageSavedAs(); // setting the image save as indicator to true
     }
 }
