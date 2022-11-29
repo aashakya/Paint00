@@ -18,7 +18,7 @@ public class TabPlus extends Tab {
     ScrollPane scrollpane; // for a scrollable tab
     File path; // stores the tab's file path
     private TimerTask logger;
-    public final static String LOGGER_TXT = "src/main/java/com/example/paint00/Mylogs.txt";
+    public final static String LOGGER_TXT = "src/main/java/com/example/paint00/Mylogs.txt"; // Location of the log file
     public static CanvasPane canvasPane; // creating a canvasPane
     public boolean unSavedChange; // indicating if saved file
 
@@ -39,6 +39,7 @@ public class TabPlus extends Tab {
     }
 
     /**
+     * Get the canvasPane used
      * @return the canvasPane used to draw
      */
     public static CanvasPane getCanvasPane(){

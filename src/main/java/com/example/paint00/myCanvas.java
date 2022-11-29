@@ -8,6 +8,9 @@ import javafx.scene.image.Image;
 import javafx.scene.image.WritableImage;
 import javafx.scene.paint.Color;
 
+/**
+ * myCanvas is the extension of the Canvas class
+ */
 public class myCanvas extends Canvas {
     GraphicsContext gc; // declaring the graphics context
 
@@ -19,6 +22,7 @@ public class myCanvas extends Canvas {
     }
 
     /**
+     * Draws a rectangle with two end points input
      * @param x1 x coordinate of Point 1 of the rectangle
      * @param y1 y coordinate of Point 1 of the rectangle
      * @param x2 x coordinate of Point 2 of the rectangle
@@ -34,6 +38,7 @@ public class myCanvas extends Canvas {
     }
 
     /**
+     * Draw a square from two points: Point 1 as center and Point 2 as end
      * @param x1 x coordinate of Point 1 of the square
      * @param y1 y coordinate of Point 1 of the square
      * @param x2 x coordinate of Point 2 of the square
@@ -54,6 +59,7 @@ public class myCanvas extends Canvas {
     }
 
     /**
+     * Draw a circle from center point to end point
      * @param x1 x coordinate of the center point of the circle
      * @param y1 y coordinate of the center point of the circle
      * @param x2 x coordinate of the end point of the circle
@@ -65,6 +71,7 @@ public class myCanvas extends Canvas {
     }
 
     /**
+     * Draw a polygon with n sides from center point to end point
      * @param x1 x coordinate of the center point of the polygon
      * @param y1 y coordinate of the center point of the polygon
      * @param x2 x coordinate of the end point of the polygon
@@ -84,6 +91,7 @@ public class myCanvas extends Canvas {
     }
 
     /**
+     * draw an ellipse from center point to end point
      * @param x1 x coordinate of the center point of the ellipse
      * @param y1 y coordinate of the center point of the ellipse
      * @param x2 x coordinate of the end point of the ellipse
@@ -96,11 +104,12 @@ public class myCanvas extends Canvas {
     }
 
     /**
+     * Get snapshot starting from Point 1 to Point 2
      * @param x1 x coordinate of Point 1 of the snapshot region
      * @param y1 y coordinate of Point 1 of the snapshot region
      * @param x2 x coordinate of Point 2 of the snapshot region
      * @param y2 y coordinate of Point 2 of the snapshot region
-     * @return
+     * @return Image of the snapshot
      */
     public Image getRegion(double x1, double y1, double x2, double y2){
         // Taking the snapshot of the selected region
@@ -118,6 +127,7 @@ public class myCanvas extends Canvas {
     }
 
     /**
+     * Get color of the pixel at the given coordinates
      * @param x x coordinate of selected point
      * @param y y coordinate of selected point
      * @return Color at the selected point

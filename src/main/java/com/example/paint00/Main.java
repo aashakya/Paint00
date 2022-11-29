@@ -17,7 +17,8 @@ import java.io.FileNotFoundException;
  * The Paint application
  */
 public class Main extends Application {
-    public static Stage myStage; // declaring the stage
+    // declaring the stage
+    public static Stage myStage;
     static TabPane tabPane; // declaring the tabPane
 
     static TabPlus tab1; // declaring the tab object as a TabPlus
@@ -55,10 +56,18 @@ public class Main extends Application {
         primaryStage.setOnCloseRequest(e-> DialogBox.unsavedAlert());
     }
 
+    /**
+     * Get the stage used in the application
+     * @return the stage
+     */
     public static Stage getStage() {
         return myStage;
     }
 
+    /**
+     * Launches the application
+     * @param args the command line arguments
+     */
     public static void main(String[] args) {
         launch();
     }
@@ -80,6 +89,7 @@ public class Main extends Application {
     }
 
     /**
+     * Get the tabPane active in the application
      * @return the tab that user is currently working on
      */
     public static TabPlus getActiveTab(){

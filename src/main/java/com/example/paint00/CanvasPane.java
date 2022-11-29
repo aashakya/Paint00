@@ -212,6 +212,7 @@ public class CanvasPane extends myCanvas{
     }
 
     /**
+     * Rotates the selected portion of the canvas by the given angle
      * @param i the angle to rotate the imagePiece
      */
     public void rotatePiece(int i){
@@ -288,6 +289,7 @@ public class CanvasPane extends myCanvas{
     }
 
     /**
+     * Clear the canvas by setting the background color to white
      * @param gc the graphics context
      * @param canvasWidth the initial width of the canvas
      * @param canvasHeight the initial height of the canvas
@@ -298,6 +300,7 @@ public class CanvasPane extends myCanvas{
     }
 
     /**
+     * Indicates if the image is saved as a filename or not
      * @return boolean value indicating if the user saved the image as or not
      */
     public boolean getImageSavedAs(){return imageSavedAs;}

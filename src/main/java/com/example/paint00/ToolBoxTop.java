@@ -79,6 +79,7 @@ public class ToolBoxTop {
     static String selectedTool = null; // to keep account of selected tools
 
     /**
+     * Get the color selected by the user
      * @return the color picker's color value
      */
     public static Color getColorPicker() {
@@ -86,19 +87,22 @@ public class ToolBoxTop {
     } // getter for colorPicker
 
     /**
+     * set the color of the color picker
      * @param color the color value selected from the color picker tool
      */
     // setter for colorPicker
     public static void setColorPicker(Color color) {ToolBoxTop.colorPicker.setValue(color);}
 
     /**
+     * Get the brush size selected by the user
      * @return the selected value of the brush size
      */
     public static double getBrushSize() {
         return brushSize.getValue();
-    } // getter for brushSize
+    }
 
     /**
+     * Get the tool selected by the user
      * @return the name of the tool selected and if no tool is selected returns "None"
      */
     public static String getSelectedTool() {
@@ -107,6 +111,7 @@ public class ToolBoxTop {
     }
 
     /**
+     * Get the number of sides input
      * @return the number of sides entered by the user
      */
     public static int getSizeNo(){
@@ -144,7 +149,7 @@ public class ToolBoxTop {
         );
 
         selectTime = new ComboBox(timeOptions); // adding the time options to drop-down list
-        selectTime.setPromptText("Time :"); // setting the prompt text for the drop-down list
+        selectTime.setPromptText("Select time :"); // setting the prompt text for the drop-down list
         // On clicking 60 sec or 120 sec, call SaveTimer and pass the number of seconds
         selectTime.setOnAction(event -> {
             if(selectTime.getValue().equals("60 sec")) new SaveTimer(60);
