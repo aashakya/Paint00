@@ -29,7 +29,7 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws FileNotFoundException {
         myStage = primaryStage;
         //set up the title for the stage
-        primaryStage.setTitle("Paint 00");
+        primaryStage.setTitle("Paint++");
         // Get primary screen bounds
         Rectangle2D screenBounds = Screen.getPrimary().getBounds();
         primaryStage.setX(screenBounds.getMinX());

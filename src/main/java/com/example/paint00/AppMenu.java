@@ -12,6 +12,7 @@ import javax.imageio.ImageIO;
 import java.awt.image.RenderedImage;
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
 
 /**
  * The class for the menu of the application
@@ -84,7 +85,14 @@ public class AppMenu{
         undoOpt.setOnAction(e -> Main.getActiveTab().undo());
         redoOpt.setOnAction(e -> Main.getActiveTab().redo());
         clearCanvas.setOnAction(e -> DialogBox.clearCAlert());
-
+        // when about is clicked, open the hyperlink in the browser
+        aboutItem.setOnAction(e -> {
+            try {
+                java.awt.Desktop.getDesktop().browse(URI.create("https://github.com/aashakya/Paint00"));
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+        });
         // keyboard shortcuts for the menu options
         openItem.setAccelerator(new KeyCodeCombination(KeyCode.O, KeyCombination.CONTROL_DOWN));
         saveItem.setAccelerator(new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN));
