@@ -5,15 +5,14 @@ Paint00 is the implementation of the Microsoft Paint application using Java/Java
 
 ## Roadmap
 
+Demo Link: https://youtu.be/2GO7Qhs7voM
 
-### Paint Version 3.1 -  10/21/2022
+![](src/main/java/com/example/paint00/Images/Screen Shot.png)
+### Paint Version 3.1 -  11/28/2022
 New features:
 - Zoom In and Zoom Out
-- Menu Item "About" redirects to the Github Link
+- Menu Item "About" redirects to the GitHub Link
 
-Known issues:
-
-Expected next sprint:
 
 ### Paint Version 3.0 -  10/21/2022
 New features:
